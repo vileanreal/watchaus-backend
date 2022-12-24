@@ -19,7 +19,6 @@ namespace WH.ADMIN.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            // test commit
             AuthService service = new AuthService();
             var result = service.Login(request.Username,request.Password);
 
