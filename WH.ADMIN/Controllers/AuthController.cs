@@ -12,11 +12,12 @@ namespace WH.ADMIN.Controllers
 {
     [ValidateModel]
     [HandleException]
-    [Route("api/admin/auth")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         [HttpPost("login")]
+        [ProducesDefaultResponseType(typeof(LoginResponse))]
         public IActionResult Login([FromBody] LoginRequest request)
         {
             AuthService service = new AuthService();
@@ -33,17 +34,6 @@ namespace WH.ADMIN.Controllers
             response.Token = token;
 
             return HttpHelper.Success(response, result.Message);
-        }
-
-        [Authorize]
-        [HttpPost("test")]
-        public IActionResult Test([FromBody] LoginRequest request)
-        {
-            ClaimsPrincipal principal = HttpContext.User;
-
-            
-
-            return HttpHelper.Success();
         }
 
     }

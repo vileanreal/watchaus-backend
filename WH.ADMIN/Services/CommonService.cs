@@ -5,6 +5,12 @@ namespace WH.PORTAL.Services
 {
     public class CommonService
     {
+
+        public Dictionary<string, string> GetSettings() { 
+            using CommonManager manager = new CommonManager();
+            return manager.SelectAllSettings();
+        }
+
         public I_Settings GetSetting(string settingCode) {
             using CommonManager manager = new CommonManager();
             var setting = manager.SelectSetting(settingCode);
@@ -22,6 +28,13 @@ namespace WH.PORTAL.Services
                 throw new Exception("Template doesn't exist");
             }
             return template;
+        }
+
+
+        public void InsertAuditTrailLogs(AuditTrails audit) {
+            using var manager = new CommonManager();
+            manager.InsertAuditTrails(audit);
+            return;
         }
     }
 }

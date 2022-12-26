@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -42,5 +43,9 @@ namespace WH.ADMIN.Helper
             var stringToken = tokenHandler.WriteToken(token);
             return stringToken;
         }
+
     }
+
+
+
 }

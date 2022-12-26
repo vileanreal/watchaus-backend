@@ -7,6 +7,7 @@ using System.Text;
 using Utilities;
 using Utilities.SeriLog;
 using WH.ADMIN.Helper;
+using WH.ADMIN.Services;
 
 namespace WH.ADMIN
 {
@@ -75,6 +76,9 @@ namespace WH.ADMIN
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
+                o.Events = new JwtBearerEvents() { 
+                    OnTokenValidated = ValidateSession
+                };
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = TokenHelper.Issuer,
@@ -87,8 +91,6 @@ namespace WH.ADMIN
                     ValidateIssuerSigningKey = true
                 };
             });
-
-
 
 
             builder.Services.AddAuthorization();
@@ -112,5 +114,20 @@ namespace WH.ADMIN
 
             app.Run();
         }
+
+        public static Task ValidateSession(TokenValidatedContext context)
+        {
+            Session session = new Session(context.Principal);
+            var service = new UserService();
+            if (!service.IsUserExist(session.Username))
+            {
+                context.Fail("Invalid session id.");
+            }
+
+            return Task.CompletedTask;
+        }
     }
+
+
+
 }

@@ -21,10 +21,31 @@ namespace WH.ADMIN.Services
             return manager.SelectUser("username", username);
         }
 
-        public OperationResult AddUser(User user, long addedBy) {
-            
-            if (IsUserExist(user.Username)) {
+        public OperationResult AddUser(User user, Session session) {
+
+            long loggonedId = session.Id;
+            var loggonedUser = GetUserDetails(session.Username);
+            var branchService = new BranchService();
+
+            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
+                loggonedUser.RoleId != Roles.ADMIN)
+            {
+                return OperationResult.Failed("You don't have permission to add new user.");
+            }
+
+            if (user.RoleId == Roles.OPERATOR &&
+                (user.BranchId == null || user.BranchId == 0)) {
+                return OperationResult.Failed("BranchId is required if role is Operator.");
+            }
+
+            if (IsUserExist(user.Username))
+            {
                 return OperationResult.Failed("Username already exist.");
+            }
+
+            if (!branchService.IsBranchExist(user.BranchId ?? 0))
+            {
+                return OperationResult.Failed("Branch doesn't exist.");
             }
 
             var password = PasswordHelper.GeneratePassword();
@@ -32,7 +53,7 @@ namespace WH.ADMIN.Services
             user.Password = CryptoHelper.Encrypt(password);
 
             var logDescription = new UsersSercurityLogs() {
-                UserId = addedBy,
+                UserId = loggonedId,
                 Description = $"Added new user: {user.Username}",
                 Status = Status.SUCCESS
             };
@@ -55,6 +76,98 @@ namespace WH.ADMIN.Services
             emailHelper.SendEmail(user.Email, subject, body);
 
             return OperationResult.Success("User added successfully.");
+        }
+
+
+        public OperationResult UpdateUser(User user, Session session) {
+
+            long loggonedId = session.Id;
+            var loggonedUser = GetUserDetails(session.Username);
+            var branchService = new BranchService();
+
+
+            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
+                loggonedUser.RoleId != Roles.ADMIN) {
+                return OperationResult.Failed("You  don't have permission to update user details.");
+            }
+
+            if (user.RoleId == Roles.OPERATOR &&
+                user.BranchId == null)
+            {
+                return OperationResult.Failed("BranchId is required if role is Operator.");
+            }
+
+            if (!IsUserExist(user.Username))
+            {
+                return OperationResult.Failed("Username doesn't exist.");
+            }
+
+            if (user.BranchId > 0 &&
+                !branchService.IsBranchExist(user.BranchId ?? 0))
+            {
+                return OperationResult.Failed("Branch doesn't exist.");
+            }
+
+            var logDescription = new UsersSercurityLogs()
+            {
+                UserId = loggonedId,
+                Description = $"Updated user details: {user.Username}",
+                Status = Status.SUCCESS
+            };
+
+            using UserManager userManager = new UserManager();
+            userManager.BeginTransaction();
+            userManager.UpdateUser(user);
+            userManager.InsertSecurityLogs(logDescription);
+            userManager.Commit();
+
+            return OperationResult.Success("User details is updated successfully.");
+        }
+
+
+        public List<User> GetUserList() {
+            using var manager = new UserManager();
+            return manager.SelectActiveUsers();
+        }
+
+        public OperationResult DeleteUser(string username, Session session) {
+
+            long loggonedId = session.Id;
+            var loggonedUser = GetUserDetails(session.Username);
+
+            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
+                loggonedUser.RoleId != Roles.ADMIN)
+            {
+                return OperationResult.Failed("You don't have permission to delete a user.");
+            }
+
+
+            var user = GetUserDetails(username);
+
+            if (user == null)
+            {
+                return OperationResult.Failed("Username doesn't exist.");
+            }
+
+            if (user.RoleId == Roles.SUPERADMIN)
+            {
+                return OperationResult.Failed("You can't delete user with SUPERADMIN role");
+            }
+
+            var logDescription = new UsersSercurityLogs()
+            {
+                UserId = loggonedId,
+                Description = $"Deleted user: {username}",
+                Status = Status.SUCCESS
+            };
+            
+            using UserManager userManager = new UserManager();
+            userManager.BeginTransaction();
+            userManager.UpdateUserStatus(username, Status.DELETED);
+            userManager.InsertSecurityLogs(logDescription);
+            userManager.Commit();
+
+            return OperationResult.Success("User is successfully deleted.");
         }
     }
 }

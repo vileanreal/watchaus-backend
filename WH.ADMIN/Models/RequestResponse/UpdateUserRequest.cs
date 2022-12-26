@@ -3,7 +3,7 @@ using Utilities.attributes;
 
 namespace WH.ADMIN.Models.RequestResponse
 {
-    public class AddUserRequest
+    public class UpdateUserRequest
     {
         [Required]
         [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must not contain any special characters.")]

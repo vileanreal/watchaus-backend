@@ -33,5 +33,17 @@ namespace WH.ADMIN.Models.Entities
             this.BranchId = request.BranchId;
             this.RoleId = request.RoleId;
         }
+
+        public User(UpdateUserRequest request)
+        {
+            this.Username = request.Username;
+            this.FirstName = request.FirstName;
+            this.MiddleName = request.MiddleName;
+            this.LastName = request.LastName;
+            this.Email = request.Email;
+            this.PhoneNo = request.PhoneNo;
+            this.BranchId = request.BranchId;
+            this.RoleId = request.RoleId;
+        }
     }
 }
