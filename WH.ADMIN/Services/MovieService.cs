@@ -1,5 +1,6 @@
 ﻿using Utilities;
 using WH.ADMIN.DBManager;
+using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
 using WH.PORTAL.Services;
 
@@ -21,6 +22,13 @@ namespace WH.ADMIN.Services
         public OperationResult AddMovie(Movies movie, Session session) {
             var userService = new UserService();
             var loggonedUser = userService.GetUserDetails(session.Username);
+
+
+            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
+                loggonedUser.RoleId != Roles.ADMIN) {
+                return OperationResult.Failed("Only admin can add new movie.");
+            }
+
             var commonService = new CommonService();
             var settings = commonService.GetSettings();
             var filePath = settings["IMG_FILE_PATH"];
