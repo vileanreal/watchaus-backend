@@ -1,4 +1,6 @@
-﻿namespace WH.ADMIN.Models.RequestResponse
+﻿using WH.ADMIN.Models.Entities;
+
+namespace WH.ADMIN.Models.RequestResponse
 {
     public class GetUserListResponse
     {
@@ -13,5 +15,19 @@
         public string BranchName { get; set; }
         public long? RoleId { get; set; }
         public string RoleName { get; set; }
+
+        public GetUserListResponse(User user) {
+            UserId = user.UserId;
+            Username = user.Username;
+            FirstName = user.FirstName;
+            MiddleName = user.MiddleName;
+            LastName = user.LastName;
+            Email = user.Email;
+            PhoneNo = user.PhoneNo;
+            BranchId = user.BranchId;
+            BranchName = user.BranchName;
+            RoleId = user.RoleId;
+            RoleName = user.RoleName;
+        }
     }
 }

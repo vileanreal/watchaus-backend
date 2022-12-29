@@ -41,20 +41,7 @@ namespace WH.ADMIN.Controllers
             var service = new UserService();
             var result = service.GetUserList();
 
-            List<GetUserListResponse> response = result.Select(x => new GetUserListResponse
-            {
-                UserId = x.UserId,
-                Username = x.Username,
-                FirstName = x.FirstName,
-                MiddleName = x.MiddleName,
-                LastName = x.LastName,
-                Email = x.Email,
-                PhoneNo = x.PhoneNo,
-                BranchId = x.BranchId,
-                BranchName = x.BranchName,
-                RoleId = x.RoleId,
-                RoleName = x.RoleName
-            }).ToList();
+            List<GetUserListResponse> response = result.Select(x => new GetUserListResponse(x)).ToList();
 
             return HttpHelper.Success(response);
         }

@@ -25,11 +25,7 @@ namespace WH.ADMIN.Controllers
             var service = new BranchService();
             var list = service.GetBranchList();
 
-            var response = list.Select(item => new GetBranchListResponse()
-            {
-                BranchId = item.BranchId,
-                Name = item.Name
-            }).ToList();
+            var response = list.Select(item => new GetBranchListResponse(item)).ToList();
 
             return HttpHelper.Success(response);
         }
