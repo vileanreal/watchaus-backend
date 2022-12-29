@@ -40,8 +40,7 @@ namespace WH.ADMIN.Controllers
 
             var service = new UserService();
             var result = service.GetUserList();
-
-            List<GetUserListResponse> response = result.Select(x => new GetUserListResponse(x)).ToList();
+            var response = result.Select(x => new GetUserListResponse(x)).ToList();
 
             return HttpHelper.Success(response);
         }
