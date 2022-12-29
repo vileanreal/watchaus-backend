@@ -1,7 +1,11 @@
 using DBHelper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
+using System.Net;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
@@ -75,12 +79,13 @@ namespace WH.ADMIN
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
+            }).AddJwtBearer(options =>
             {
-                o.Events = new JwtBearerEvents() { 
-                    OnTokenValidated = ValidateSession
+                options.Events = new JwtBearerEvents() { 
+                    OnTokenValidated = ValidateToken,
+                    OnChallenge = SendCustomResponse
                 };
-                o.TokenValidationParameters = new TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = TokenHelper.Issuer,
                     ValidAudience = TokenHelper.Audience,
@@ -91,6 +96,7 @@ namespace WH.ADMIN
                     ValidateLifetime = validateLifeTime,
                     ValidateIssuerSigningKey = true
                 };
+
             });
 
 
@@ -116,22 +122,41 @@ namespace WH.ADMIN
             app.Run();
         }
 
-        public static Task ValidateSession(TokenValidatedContext context)
+        private static Task SendCustomResponse(JwtBearerChallengeContext context)
+        {
+            if (context.AuthenticateFailure?.Message == "Error on validating token.") {
+                context.HandleResponse();
+                context.HttpContext.Response.ContentType = "application/json";
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(OperationResult.Failed($"An internal error occured. {context.AuthenticateFailure?.Message}")));
+            }
+            
+            return Task.CompletedTask;
+        }
+
+        public static Task ValidateToken(TokenValidatedContext context)
         {
             Session session = new Session(context.Principal);
-            var service = new UserService();
-            var user = service.GetUserDetails(session.Username);
 
-            if (user == null)
-            {
-                context.Fail("Invalid session id.");
+            try {
+                var service = new UserService();
+                var user = service.GetUserDetails(session.Username);
+
+                if (user == null)
+                {
+                    context.Fail("Invalid session id.");
+                }
+
+                var identity = context.Principal.Identity as ClaimsIdentity;
+
+                // Add a new claim or update the existing claim
+                identity?.AddClaim(new Claim("roleId", user.RoleId?.ToString() ?? ""));
+                identity?.AddClaim(new Claim("roleName", user.RoleName ?? ""));
             }
-
-            var identity = context.Principal.Identity as ClaimsIdentity;
-
-            // Add a new claim or update the existing claim
-            identity.AddClaim(new Claim("roleId", user.RoleId?.ToString() ?? ""));
-            identity.AddClaim(new Claim("roleName", user.RoleName ?? "" ));
+            catch (Exception ex) {
+                Log.Error("An internal error occured. {Exception}", ex);
+                context.Fail("Error on validating token.");
+            }
 
             return Task.CompletedTask;
         }
