@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Text;
 using Utilities;
 using Utilities.SeriLog;
@@ -119,10 +120,18 @@ namespace WH.ADMIN
         {
             Session session = new Session(context.Principal);
             var service = new UserService();
-            if (!service.IsUserExist(session.Username))
+            var user = service.GetUserDetails(session.Username);
+
+            if (user == null)
             {
                 context.Fail("Invalid session id.");
             }
+
+            var identity = context.Principal.Identity as ClaimsIdentity;
+
+            // Add a new claim or update the existing claim
+            identity.AddClaim(new Claim("roleId", user.RoleId?.ToString() ?? ""));
+            identity.AddClaim(new Claim("roleName", user.RoleName ?? "" ));
 
             return Task.CompletedTask;
         }

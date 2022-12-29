@@ -2,8 +2,10 @@
 
 namespace WH.ADMIN.Models.RequestResponse
 {
-    public class AddMovieRequest
+    public class UpdateMovieRequest
     {
+        [Required]
+        public long? MovieId { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
@@ -13,14 +15,5 @@ namespace WH.ADMIN.Models.RequestResponse
         public int Duration { get; set; }
         [Required]
         public List<int> Genres { get; set; }
-        [Required]
-        public string MoviePosterImg { get; set; }
-        [Required]
-        public List<string> Screenshots { get; set; }
-
-        [Required]
-        public string showingDateStart { get; set; }
-        [Required]
-        public string showingDateEnd { get; set; }
     }
 }

@@ -113,6 +113,67 @@ namespace Utilities
 
 
 
+        public static string GetBase64Image(string filePath, string host = null, int port = 0, string username = null, string password = null)
+        {
+            if (filePath.StartsWith("sftp://"))
+            {
+                return GetBase64ImageFromSftp(filePath, host, port, username, password);
+            }
+            else
+            {
+                return GetBase64ImageFromLocalFileSystem(filePath);
+            }
+        }
+
+        private static string GetBase64ImageFromSftp(string filePath, string host, int port, string username, string password)
+        {
+            // Retrieve the image from an SFTP server
+            if (string.IsNullOrEmpty(host))
+            {
+                throw new ArgumentException("Host must be specified for SFTP file path.");
+            }
+            if (port <= 0)
+            {
+                port = 22;
+            }
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("Username must be specified for SFTP file path.");
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException("Password must be specified for SFTP file path.");
+            }
+
+            using (SftpClient client = new SftpClient(host, port, username, password))
+            {
+                client.Connect();
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    client.DownloadFile(filePath, memoryStream);
+                    return Convert.ToBase64String(memoryStream.ToArray());
+                }
+                client.Disconnect();
+            }
+        }
+
+        private static string GetBase64ImageFromLocalFileSystem(string filePath)
+        {
+            // Retrieve the image from the local file system
+            using (FileStream fs = new FileStream(filePath, FileMode.Open))
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    fs.CopyTo(memoryStream);
+                    return Convert.ToBase64String(memoryStream.ToArray());
+                }
+            }
+        }
+
+
+
+
         public static bool IsBase64Image(string base64, out string extension)
         {
             extension = String.Empty;

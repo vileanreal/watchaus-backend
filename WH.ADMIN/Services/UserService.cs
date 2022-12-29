@@ -23,15 +23,7 @@ namespace WH.ADMIN.Services
 
         public OperationResult AddUser(User user, Session session) {
 
-            long loggonedId = session.Id;
-            var loggonedUser = GetUserDetails(session.Username);
             var branchService = new BranchService();
-
-            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
-                loggonedUser.RoleId != Roles.ADMIN)
-            {
-                return OperationResult.Failed("You don't have permission to add new user.");
-            }
 
             if (user.RoleId == Roles.OPERATOR &&
                 (user.BranchId == null || user.BranchId == 0)) {
@@ -53,7 +45,7 @@ namespace WH.ADMIN.Services
             user.Password = CryptoHelper.Encrypt(password);
 
             var logDescription = new UsersSercurityLogs() {
-                UserId = loggonedId,
+                UserId = session.Id,
                 Description = $"Added new user: {user.Username}",
                 Status = Status.SUCCESS
             };
@@ -81,15 +73,8 @@ namespace WH.ADMIN.Services
 
         public OperationResult UpdateUser(User user, Session session) {
 
-            long loggonedId = session.Id;
-            var loggonedUser = GetUserDetails(session.Username);
             var branchService = new BranchService();
 
-
-            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
-                loggonedUser.RoleId != Roles.ADMIN) {
-                return OperationResult.Failed("You  don't have permission to update user details.");
-            }
 
             if (user.RoleId == Roles.OPERATOR &&
                 user.BranchId == null)
@@ -110,7 +95,7 @@ namespace WH.ADMIN.Services
 
             var logDescription = new UsersSercurityLogs()
             {
-                UserId = loggonedId,
+                UserId = session.Id,
                 Description = $"Updated user details: {user.Username}",
                 Status = Status.SUCCESS
             };
@@ -132,16 +117,6 @@ namespace WH.ADMIN.Services
 
         public OperationResult DeleteUser(string username, Session session) {
 
-            long loggonedId = session.Id;
-            var loggonedUser = GetUserDetails(session.Username);
-
-            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
-                loggonedUser.RoleId != Roles.ADMIN)
-            {
-                return OperationResult.Failed("You don't have permission to delete a user.");
-            }
-
-
             var user = GetUserDetails(username);
 
             if (user == null)
@@ -156,7 +131,7 @@ namespace WH.ADMIN.Services
 
             var logDescription = new UsersSercurityLogs()
             {
-                UserId = loggonedId,
+                UserId = session.Id,
                 Description = $"Deleted user: {username}",
                 Status = Status.SUCCESS
             };

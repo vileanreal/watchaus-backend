@@ -43,15 +43,6 @@ namespace WH.ADMIN.Services
         public OperationResult AddBranch(Branch branch, Session session)
         {
 
-            var userService = new UserService();
-            var loggonedUser = userService.GetUserDetails(session.Username);
-
-            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
-                loggonedUser.RoleId != Roles.ADMIN)
-            {
-                return OperationResult.Failed("Only admin can add new branch.");
-            }
-
             if (IsBranchExist(branch.Name))
             {
                 return OperationResult.Failed("Branch already exist.");
@@ -62,7 +53,7 @@ namespace WH.ADMIN.Services
 
             var commonService = new CommonService();
             commonService.InsertAuditTrailLogs(new AuditTrails() { 
-                UserId = loggonedUser.UserId,
+                UserId = session.Id,
                 Description = $"Added new branch: {branch.Name}"
             });
 
@@ -74,14 +65,6 @@ namespace WH.ADMIN.Services
         public OperationResult UpdateBranch(Branch branch, Session session)
         {
 
-            var userService = new UserService();
-            var loggonedUser = userService.GetUserDetails(session.Username);
-
-            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
-                loggonedUser.RoleId != Roles.ADMIN)
-            {
-                return OperationResult.Failed("Only admin can update branch details.");
-            }
 
             if (!IsBranchExist(branch.BranchId))
             {
@@ -94,7 +77,7 @@ namespace WH.ADMIN.Services
             var commonService = new CommonService();
             commonService.InsertAuditTrailLogs(new AuditTrails() 
             {
-                UserId = loggonedUser.UserId,
+                UserId = session.Id,
                 Description = $"Updated branch id: {branch.BranchId}, new branch name {branch.Name}"
             });
 
@@ -102,31 +85,22 @@ namespace WH.ADMIN.Services
         }
 
 
-        public OperationResult DeleteBranch(Branch branch, Session session)
+        public OperationResult DeleteBranch(long branchId, Session session)
         {
 
-            var userService = new UserService();
-            var loggonedUser = userService.GetUserDetails(session.Username);
-
-            if (loggonedUser.RoleId != Roles.SUPERADMIN &&
-                loggonedUser.RoleId != Roles.ADMIN)
-            {
-                return OperationResult.Failed("Only admin can delete branch.");
-            }
-
-            if (!IsBranchExist(branch.BranchId))
+            if (!IsBranchExist(branchId))
             {
                 return OperationResult.Failed("Branch doesn't exist.");
             }
 
             using var manager = new BranchManager();
-            manager.UpdateBranchStatus(branch.BranchId, Status.DELETED);
+            manager.UpdateBranchStatus(branchId, Status.DELETED);
 
             var commonService = new CommonService();
             commonService.InsertAuditTrailLogs(new AuditTrails()
             {
-                UserId = loggonedUser.UserId,
-                Description = $"Deleted branch id: {branch.BranchId}, branch name: {branch.Name}"
+                UserId = session.Id,
+                Description = $"Deleted branch id: {branchId}"
             });
 
             return OperationResult.Success("Branch deleted successfully.");

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Utilities;
+using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
 using WH.ADMIN.Models.RequestResponse;
 using WH.ADMIN.Services;
@@ -39,6 +40,13 @@ namespace WH.ADMIN.Controllers
         {
             Session session = new Session(HttpContext.User);
 
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN)
+            {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+
+            }
+
             var service = new BranchService();
             var result = service.AddBranch(new Branch(request), session);
 
@@ -57,6 +65,13 @@ namespace WH.ADMIN.Controllers
         {
             Session session = new Session(HttpContext.User);
 
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN)
+            {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+
+            }
+
             var service = new BranchService();
             var result = service.UpdateBranch(new Branch(request), session);
 
@@ -69,13 +84,20 @@ namespace WH.ADMIN.Controllers
         }
 
 
-        [HttpDelete("delete-branch")]
-        public IActionResult DeleteBranch([FromBody] DeleteBranchRequest request)
+        [HttpDelete("delete-branch/{branchId}")]
+        public IActionResult DeleteBranch(long branchId)
         {
             Session session = new Session(HttpContext.User);
 
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN)
+            {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+
+            }
+
             var service = new BranchService();
-            var result = service.DeleteBranch(new Branch(request), session);
+            var result = service.DeleteBranch(branchId, session);
 
             if (!result.IsSuccess)
             {

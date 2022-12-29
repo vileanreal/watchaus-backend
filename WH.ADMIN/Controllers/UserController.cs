@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utilities;
+using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
 using WH.ADMIN.Models.RequestResponse;
 using WH.ADMIN.Services;
@@ -63,6 +64,13 @@ namespace WH.ADMIN.Controllers
         {
             Session session = new Session(HttpContext.User);
 
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN)
+            {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+
+            }
+
             UserService service = new UserService();
             var newUser = new User(request);
             var result = service.AddUser(newUser, session);
@@ -79,6 +87,13 @@ namespace WH.ADMIN.Controllers
         [HttpPut("update-user")]
         public IActionResult UpdateUser([FromBody] UpdateUserRequest request) {
             Session session = new Session(HttpContext.User);
+
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN)
+            {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+
+            }
 
             UserService service = new UserService();
             var newUser = new User(request);
@@ -99,6 +114,14 @@ namespace WH.ADMIN.Controllers
         public IActionResult DeleteUser(string username)
         {
             Session session = new Session(HttpContext.User);
+
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN)
+            {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+
+            }
+
             var service = new UserService();
             var result = service.DeleteUser(username, session);
 

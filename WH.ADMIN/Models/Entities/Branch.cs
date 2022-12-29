@@ -20,11 +20,7 @@ namespace WH.ADMIN.Models.Entities
             this.BranchId = request.BranchId ?? 0;
             this.Name = request.Name;
         }
-
-        public Branch(DeleteBranchRequest request)
-        {
-            this.BranchId = request.BranchId ?? 0;
-        }
+       
     }
 
 

@@ -7,11 +7,54 @@ namespace WH.ADMIN.DBManager
     public class MovieManager: BaseManager
     {
         #region SELECT
-        public Movies GetMovie(string col, string val) {
-            string sql = @$"SELECT * FROM MOVIES WHERE {col} = @val";
+        public Movies SelectMovie(string col, string val)
+        {
+            string sql = @$"SELECT * FROM MOVIES WHERE {col} = @val AND status = @status";
             AddParameter("@val", val);
+            AddParameter("@status", Status.ACTIVE);
             return SelectSingle<Movies>(sql);
         }
+
+        public List<Movies> SelectMovieList()
+        {
+            string sql = @$"SELECT * FROM MOVIES WHERE status = @status";
+            AddParameter("@status", Status.ACTIVE);
+            return SelectList<Movies>(sql);
+        }
+
+        public List<MoviesGenre> SelectMovieGenre(long movieId) {
+            string sql = @"SELECT 
+                           mg.mg_id,
+                           mg.movie_id,
+                           mg.genre_id,
+                           ig.name
+                           FROM MOVIES_GENRE mg 
+                           LEFT JOIN I_GENRES ig ON ig.genre_id = mg.genre_id
+                           WHERE mg.movie_id = @movie_id";
+            AddParameter("@movie_id", movieId);
+            return SelectList<MoviesGenre>(sql);
+        }
+
+        public List<MoviesImages> SelectMovieImages(long movieId) {
+            string sql = @"SELECT * FROM MOVIES_IMAGES WHERE movie_id = @movie_id";
+            AddParameter("@movie_id", movieId);
+            return SelectList<MoviesImages>(sql);
+        }
+
+
+        public List<MoviesSchedule> SelectMovieSchedule(long movieId) {
+            string sql = @"SELECT 
+                           schedule_id,
+                           movie_id,
+                           DATE_FORMAT(date_start, '%Y-%m-%d') as date_start,
+                           DATE_FORMAT(date_end, '%Y-%m-%d') as date_end
+                           FROM MOVIES_SCHEDULE WHERE movie_id = @movie_id";
+            AddParameter("@movie_id", movieId);
+            return SelectList<MoviesSchedule>(sql);
+        }
+
+
+
 
         #endregion
 
@@ -60,9 +103,37 @@ namespace WH.ADMIN.DBManager
         #endregion
 
         #region UPDATE
+        public void UpdateMovieStatus(long movieId, string status) {
+            string sql = @"UPDATE MOVIES SET status = @status WHERE movie_id = @movie_id";
+            AddParameter("@movie_id", movieId);
+            AddParameter("@status", status);
+            ExecuteQuery(sql);
+            return;
+        }
+
+        public void UpdateMovieDetails(Movies movie) {
+            string sql = @"UPDATE MOVIES SET 
+                           title = @title,
+                           description = @description,
+                           duration = @duration
+                           WHERE movie_id = @movie_id";
+            AddParameter("@movie_id", movie.MovieId);
+            AddParameter("@title", movie.Title);
+            AddParameter("@description", movie.Description);
+            AddParameter("@duration", movie.Duration);
+            ExecuteQuery(sql);
+            return;
+        }
+
         #endregion
 
         #region DELETE
+        public void DeleteMovieGenres(long movieId) {
+            string sql = @"DELETE FROM MOVIES_GENRE WHERE movie_id = @movie_id";
+            AddParameter("@movie_id", movieId);
+            ExecuteQuery(sql);
+            return;
+        }
         #endregion
 
     }

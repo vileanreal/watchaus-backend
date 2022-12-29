@@ -46,5 +46,20 @@ namespace WH.ADMIN.Models.Entities
             };
 
         }
+
+
+        public Movies(UpdateMovieRequest request)
+        {
+            this.MovieId = request.MovieId ?? 0;
+            this.Title = request.Title;
+            this.Description = request.Description;
+            this.Duration = request.Duration;
+
+            this.GenreList = request.Genres.Select(item => new MoviesGenre()
+            {
+                MovieId = request.MovieId ?? 0,
+                GenreId = item
+            }).ToList();
+        }
     }
 }
