@@ -119,6 +119,8 @@ namespace WH.ADMIN.Services
                 return OperationResult.Failed("Movie doesn't exist.");
             }
 
+            // TODO: add validation if movie is assigned to a screen
+
             using var manager = new MovieManager();
             manager.BeginTransaction();
 

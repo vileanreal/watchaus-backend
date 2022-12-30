@@ -17,7 +17,7 @@ namespace WH.ADMIN.DBManager
 
         public List<Movies> SelectMovieList()
         {
-            string sql = @$"SELECT * FROM MOVIES WHERE status = @status";
+            string sql = @$"SELECT * FROM MOVIES WHERE status = @status ORDER BY movie_id DESC";
             AddParameter("@status", Status.ACTIVE);
             return SelectList<Movies>(sql);
         }

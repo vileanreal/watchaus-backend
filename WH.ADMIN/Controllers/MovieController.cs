@@ -97,7 +97,7 @@ namespace WH.ADMIN.Controllers
             {
                 return HttpHelper.Failed(result.Message);
             }
-            return HttpHelper.Success();
+            return HttpHelper.Success(result.Message);
         }
 
     }
