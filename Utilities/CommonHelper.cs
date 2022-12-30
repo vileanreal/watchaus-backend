@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Utilities
@@ -24,6 +25,11 @@ namespace Utilities
             code = code.Substring(0, 10);
             // Return the code
             return code;
+        }
+
+        public static bool IsMilitaryTime(string time)
+        {
+            return Regex.IsMatch(time, @"^([01]\d|2[0-3]):([0-5]\d)$");
         }
     }
 }

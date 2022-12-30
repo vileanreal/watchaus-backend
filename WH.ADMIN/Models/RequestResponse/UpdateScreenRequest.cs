@@ -2,8 +2,10 @@
 
 namespace WH.ADMIN.Models.RequestResponse
 {
-    public class AddScreenRequest
+    public class UpdateScreenRequest
     {
+        [Required]
+        public long? ScreenId { get; set; }
         [Required]
         public long? BranchId { get; set; }
         [Required]
@@ -13,7 +15,7 @@ namespace WH.ADMIN.Models.RequestResponse
         public int? NoOfSeats { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0.")]
-        public decimal? Charge { get; set; }
+        public Decimal? Charge { get; set; }
         [Required]
         public List<string> ShowTimes { get; set; }
     }
