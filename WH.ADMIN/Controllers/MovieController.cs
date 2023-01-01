@@ -100,5 +100,28 @@ namespace WH.ADMIN.Controllers
             return HttpHelper.Success(result.Message);
         }
 
+        [HttpPut("upload-movie-poster")]
+        public IActionResult UploadMoviePoster([FromBody] UploadMoviePosterRequest request)
+        {
+            Session session = new Session(HttpContext.User);
+
+            if (session.RoleId != Roles.SUPERADMIN &&
+                session.RoleId != Roles.ADMIN) {
+                return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
+            }
+
+            MovieService service = new MovieService();
+            var movieId = request.MovieId ?? 0;
+            var base64 = request.MoviePosterImg;
+            var result = service.UploadMoviePoster(movieId, base64, session);
+
+            if (!result.IsSuccess)
+            {
+                return HttpHelper.Failed(result.Message);
+            }
+
+            return HttpHelper.Success(result.Message);
+        }
+
     }
 }

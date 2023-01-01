@@ -125,6 +125,16 @@ namespace WH.ADMIN.DBManager
             return;
         }
 
+        public void UpdateMoviePoster(long movieId, string path) {
+            string sql = @"UPDATE MOVIES_IMAGES SET
+                           path = @path
+                           WHERE movie_id = @movie_id AND is_movie_poster = 1";
+            AddParameter("@movie_id", movieId);
+            AddParameter("@path", path);
+            ExecuteQuery(sql);
+            return;
+        }
+
         #endregion
 
         #region DELETE

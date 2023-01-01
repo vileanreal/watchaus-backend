@@ -138,6 +138,47 @@ namespace WH.ADMIN.Services
         }
 
 
+        public OperationResult UploadMoviePoster(long movieId, string base64, Session session)
+        {
+            var commonService = new CommonService();
+            var settings = new Settings(commonService.GetSettings());
+
+            if (!IsMovieExist(movieId))
+            {
+                return OperationResult.Failed("Movie doesn't exist.");
+            }
+
+            var isValidBase64 = ImageHelper.IsBase64Image(base64, out var fileExtension);
+            
+            if (!isValidBase64)
+            {
+                return OperationResult.Failed("Base64 is not valid.");
+            }
+
+            var path = Path.Combine(settings.ImgFilePath, $"MI{movieId}.{fileExtension}");
+            
+            path = ImageHelper.SaveBase64Image(base64, path,
+                                               settings.ImgFileHost,
+                                               settings.ImgFilePort,
+                                               settings.ImgFileUsername,
+                                               settings.ImgFilePassword);
+            var fileName = Path.GetFileName(path);
+
+            using var manager = new MovieManager();
+            manager.BeginTransaction();
+            manager.UpdateMoviePoster(movieId, fileName);
+
+            commonService.InsertAuditTrailLogs(new AuditTrails()
+            {
+                UserId = session.Id,
+                Description = $"Updated movie poster, movie_id: {movieId}"
+            });
+
+            manager.Commit();
+            return OperationResult.Success("Uploaded new movie poster successfully.");
+        }
+
+
 
 
         public Movies GetMovieDetails(long movieId) {
