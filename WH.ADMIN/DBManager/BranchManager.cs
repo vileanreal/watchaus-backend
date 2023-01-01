@@ -53,7 +53,7 @@ namespace WH.ADMIN.DBManager
             string sql = @"UPDATE BRANCHES SET
                            status = @status
                            WHERE
-                           branch_id = @branch_id";
+                           branch_id = @branch_id WHERE status = 'A'";
             AddParameter("@branch_id", branchId);
             AddParameter("@status", status);
             ExecuteQuery(sql);

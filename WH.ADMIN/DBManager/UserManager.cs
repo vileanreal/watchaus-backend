@@ -104,7 +104,7 @@ namespace WH.ADMIN.DBManager
         public void UpdateUserStatus(string username, string status)
         {
             string sql = @"UPDATE USERS SET status = @status
-                           WHERE username = @username";
+                           WHERE username = @username AND status = 'A'";
 
             AddParameter("@username", username);
             AddParameter("@status", status);

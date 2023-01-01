@@ -38,6 +38,29 @@ namespace WH.ADMIN.Controllers
             return HttpHelper.Success(response);
         }
 
+        [HttpGet("get-assigned-movie-list/{screenId}")]
+        public IActionResult GetAssignedMovieList(long screenId) { 
+            ScreenService screenService = new ScreenService();
+            MovieService movieService = new MovieService();
+
+            var result = screenService.GetAssignedMovieList(screenId);
+            var response = new List<GetAssignedMovieListResponse>();
+
+            foreach (var item in result) {
+                var movieDetails = movieService.GetMovieDetails(item.MovieId);
+                
+                response.Add(new GetAssignedMovieListResponse()
+                {
+                    SamId = item.SamId,
+                    ScreenId = item.ScreenId,
+                    MovieId = item.MovieId,
+                    Title = movieDetails.Title,
+                    MoviePosterImg = movieDetails.ImageList?.Find(x => x.IsMoviePoster)?.Base64Img ?? ""
+                });
+            }
+
+            return HttpHelper.Success(response);
+        }
 
         [HttpPost("add-screen")]
         public IActionResult AddScreen(AddScreenRequest request)
@@ -85,6 +108,35 @@ namespace WH.ADMIN.Controllers
         }
 
 
+        [HttpPost("assign-movie-to-screen")]
+        public IActionResult AssignMovieToScreen([FromBody] AssignMovieToScreenRequest request) {
+            Session session = new Session(HttpContext.User);
+
+            ScreenService service = new ScreenService();
+            var result = service.AssignMovieToScreen(new ScreenAssignedMovies(request), session);
+
+            if (!result.IsSuccess)
+            {
+                return HttpHelper.Failed(result.Message);
+            }
+
+            return HttpHelper.Success(result.Message);
+        }
+
+        [HttpDelete("delete-assigned-movie")]
+        public IActionResult DeleteAssignedMovie([FromBody] DeleteAssignedMovieRequest request) {
+            Session session = new Session(HttpContext.User);
+
+            ScreenService service = new ScreenService();
+            var result = service.AssignMovieToScreen(new ScreenAssignedMovies(request), session);
+
+            if (!result.IsSuccess)
+            {
+                return HttpHelper.Failed(result.Message);
+            }
+
+            return HttpHelper.Success(result.Message);
+        }
 
     }
 }

@@ -37,9 +37,29 @@ namespace WH.ADMIN.DBManager
                            screen_id,
                            TIME_FORMAT(time_start, '%H:%i') time_start
                            FROM SCREENS_SHOW_TIMES WHERE screen_id = @screen_id";
-            AddParameter("screen_id", screenId);
+            AddParameter("@screen_id", screenId);
             return SelectList<ScreensShowTimes>(sql);
         }
+
+        public ScreenAssignedMovies SelectAssignedMovie(long screenId, long movieId)
+        {
+            string sql = @"SELECT * FROM SCREENS_ASSIGNED_MOVIES
+                           WHERE screen_id = @screen_id AND movie_id = @movie_id AND status = @status";
+            AddParameter("@screen_id", screenId);
+            AddParameter("@movie_id", movieId);
+            AddParameter("@status", Status.ACTIVE);
+            return SelectSingle<ScreenAssignedMovies>(sql);
+        }
+
+        public List<ScreenAssignedMovies> SelectAssignedMovieList(long screenId)
+        {
+            string sql = @"SELECT * FROM SCREENS_ASSIGNED_MOVIES
+                           WHERE screen_id = @screen_id AND status = @status";
+            AddParameter("@screen_id", screenId);
+            AddParameter("@status", Status.ACTIVE);
+            return SelectList<ScreenAssignedMovies>(sql);
+        }
+
         #endregion
 
 
@@ -70,10 +90,11 @@ namespace WH.ADMIN.DBManager
 
         public long InsertAssignedMovies(ScreenAssignedMovies assignedMovies)
         {
-            string sql = @"INSERT INTO SCREENS_ASSIGNED_MOVIES (movie_id, screen_id)
-                                                        VALUES (@movie_id, @screen_id)";
+            string sql = @"INSERT INTO SCREENS_ASSIGNED_MOVIES (movie_id, screen_id, status)
+                                                        VALUES (@movie_id, @screen_id, @status)";
             AddParameter("@movie_id", assignedMovies.MovieId);
             AddParameter("@screen_id", assignedMovies.ScreenId);
+            AddParameter("@status", Status.ACTIVE);
             ExecuteQuery(sql);
             return LastInsertedId;
         }
@@ -99,6 +120,15 @@ namespace WH.ADMIN.DBManager
 
         public void UpdateScreenStatus(long screenId, string status) {
             string sql = @"UPDATE SCREENS SET status = @status WHERE screen_id = @screen_id";
+            AddParameter("@screen_id", screenId);
+            AddParameter("@status", status);
+            ExecuteQuery(sql);
+            return;
+        }
+
+        public void UpdateAssignedMovieStatus(long movieId, long screenId, string status) {
+            string sql = @"UPDATE SCREENS_ASSIGNED_MOVIES SET status = @status WHERE movie_id = @movie_id AND screen_id = @screen_id";
+            AddParameter("@movie_id", movieId);
             AddParameter("@screen_id", screenId);
             AddParameter("@status", status);
             ExecuteQuery(sql);
