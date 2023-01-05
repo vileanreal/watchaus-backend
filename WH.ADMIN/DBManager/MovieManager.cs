@@ -7,6 +7,12 @@ namespace WH.ADMIN.DBManager
     public class MovieManager: BaseManager
     {
         #region SELECT
+        public List<I_Genres> SelectMovieGenreList()
+        {
+            string sql = @"SELECT * FROM I_GENRES";
+            return SelectList<I_Genres>(sql);
+        }
+
         public Movies SelectMovie(string col, string val)
         {
             string sql = @$"SELECT * FROM MOVIES WHERE {col} = @val AND status = @status";

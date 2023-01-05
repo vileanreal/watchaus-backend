@@ -24,7 +24,8 @@ namespace WH.ADMIN.DBManager
         {
             string sql = @$"SELECT * FROM USERS u 
                             LEFT JOIN I_ROLES r ON r.role_id = u.role_id
-                            WHERE u.status = @status";
+                            WHERE u.status = @status
+                            ORDER BY user_id DESC";
             AddParameter("@status", Status.ACTIVE);
             var user = SelectList<User>(sql);
             return user;

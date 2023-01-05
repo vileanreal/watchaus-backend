@@ -10,6 +10,11 @@ namespace WH.ADMIN.Services
     public class MovieService
     {
 
+        public List<I_Genres> GetGenreList() {
+            using var manager = new MovieManager();
+            return manager.SelectMovieGenreList();
+        }
+
         public List<Movies> GetMovieList() {
             using var manager = new MovieManager();
             return manager.SelectMovieList();
@@ -43,6 +48,9 @@ namespace WH.ADMIN.Services
             manager.BeginTransaction();
 
             var movieId = manager.InsertMovie(movie);
+
+
+            // TODO: validate genre
 
             foreach (var item in movie.GenreList)
             {

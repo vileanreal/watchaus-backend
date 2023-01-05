@@ -35,7 +35,8 @@ namespace WH.ADMIN.Services
                 return OperationResult.Failed("Username already exist.");
             }
 
-            if (!branchService.IsBranchExist(user.BranchId ?? 0))
+            if (user.BranchId != null && user.BranchId != 0 && 
+                !branchService.IsBranchExist(user.BranchId ?? 0))
             {
                 return OperationResult.Failed("Branch doesn't exist.");
             }

@@ -17,6 +17,17 @@ namespace WH.ADMIN.Controllers
     public class MovieController : ControllerBase
     {
 
+
+        [HttpGet("get-genre-list")]
+        [ProducesDefaultResponseType(typeof(GetGenreListResponse))]
+        public IActionResult GetGenreList()
+        {
+            var service = new MovieService();
+            var result = service.GetGenreList();
+            var response = result.Select(x => new GetGenreListResponse(x)).ToList();
+            return HttpHelper.Success(response);
+        }
+
         [HttpGet("get-movie-details/{movieId}")]
         [ProducesDefaultResponseType(typeof(GetMovieDetailsResponse))]
         public IActionResult GetMovieDetails(long movieId) {

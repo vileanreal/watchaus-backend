@@ -45,6 +45,22 @@ namespace WH.ADMIN.Controllers
             return HttpHelper.Success(response);
         }
 
+
+        [HttpGet("get-user-details/{username}")]
+        [ProducesDefaultResponseType(typeof(List<GetUserDetailsResponse>))]
+        public IActionResult GetUserDetails(string username) { 
+            var service = new UserService();
+            var result = service.GetUserDetails(username);
+            if (result == null) {
+                return HttpHelper.Failed("User doesn't exist.");
+            }
+            var response = new GetUserDetailsResponse(result);
+            return HttpHelper.Success(response);
+        }
+
+        
+
+
         [HttpPost("add-user")]
         public IActionResult AddUser([FromBody] AddUserRequest request)
         {
