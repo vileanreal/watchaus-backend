@@ -9,7 +9,8 @@ namespace WH.ADMIN.Models.RequestResponse
         public string Description { get; set; }
         public long Duration { get; set; }
 
-        public GetMovieListResponse(Movies movie) {
+        public GetMovieListResponse(Movies movie)
+        {
             this.MovieId = movie.MovieId;
             this.Title = movie.Title;
             this.Description = movie.Description;

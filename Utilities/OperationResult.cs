@@ -16,7 +16,7 @@
             {
                 IsSuccess = true,
                 Message = message,
-                Data = default(T)
+                Data = default
             };
         }
 
@@ -36,7 +36,7 @@
             {
                 IsSuccess = false,
                 Message = message,
-                Data = default(T)
+                Data = default
             };
         }
 
@@ -72,7 +72,7 @@
                 Data = null
             };
         }
- 
+
 
         public static OperationResult Failed(string? message = "Operation failed")
         {

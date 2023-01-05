@@ -16,7 +16,8 @@ namespace WH.ADMIN.Models.RequestResponse
         public long? RoleId { get; set; }
         public string RoleName { get; set; }
 
-        public GetUserListResponse(User user) {
+        public GetUserListResponse(User user)
+        {
             UserId = user.UserId;
             Username = user.Username;
             FirstName = user.FirstName;

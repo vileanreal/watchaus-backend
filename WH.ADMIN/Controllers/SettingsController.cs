@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Utilities;
-using WH.ADMIN.Models.RequestResponse;
-using WH.ADMIN.Services;
 using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
+using WH.ADMIN.Models.RequestResponse;
+using WH.ADMIN.Services;
 
 namespace WH.ADMIN.Controllers
 {
@@ -36,7 +36,7 @@ namespace WH.ADMIN.Controllers
             {
                 return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
             }
-            
+
             SettingsService service = new SettingsService();
             List<I_Settings> settingList = request.SettingList.Select(x => new I_Settings(x)).ToList();
             var result = service.UpdateSettings(settingList, session);

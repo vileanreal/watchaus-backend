@@ -3,7 +3,7 @@ using WH.PORTAL.Models.Entities;
 
 namespace WH.PORTAL.DBManager
 {
-    public class CommonManager: BaseManager
+    public class CommonManager : BaseManager
     {
         #region SELECT
         public I_Settings SelectSetting(string settingCode)

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
 using Utilities;
 using WH.ADMIN.Helper;
 using WH.ADMIN.Models.RequestResponse;
@@ -21,9 +17,10 @@ namespace WH.ADMIN.Controllers
         public IActionResult Login([FromBody] LoginRequest request)
         {
             AuthService service = new AuthService();
-            var result = service.Login(request.Username,request.Password);
+            var result = service.Login(request.Username, request.Password);
 
-            if (!result.IsSuccess) {
+            if (!result.IsSuccess)
+            {
                 return HttpHelper.Failed(result.Message);
             }
 

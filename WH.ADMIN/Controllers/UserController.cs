@@ -48,17 +48,19 @@ namespace WH.ADMIN.Controllers
 
         [HttpGet("get-user-details/{username}")]
         [ProducesDefaultResponseType(typeof(List<GetUserDetailsResponse>))]
-        public IActionResult GetUserDetails(string username) { 
+        public IActionResult GetUserDetails(string username)
+        {
             var service = new UserService();
             var result = service.GetUserDetails(username);
-            if (result == null) {
+            if (result == null)
+            {
                 return HttpHelper.Failed("User doesn't exist.");
             }
             var response = new GetUserDetailsResponse(result);
             return HttpHelper.Success(response);
         }
 
-        
+
 
 
         [HttpPost("add-user")]
@@ -76,7 +78,7 @@ namespace WH.ADMIN.Controllers
             UserService service = new UserService();
             var newUser = new User(request);
             var result = service.AddUser(newUser, session);
-            
+
             if (!result.IsSuccess)
             {
                 return HttpHelper.Failed(result.Message);
@@ -87,7 +89,8 @@ namespace WH.ADMIN.Controllers
 
 
         [HttpPut("update-user")]
-        public IActionResult UpdateUser([FromBody] UpdateUserRequest request) {
+        public IActionResult UpdateUser([FromBody] UpdateUserRequest request)
+        {
             Session session = new Session(HttpContext.User);
 
             if (session.RoleId != Roles.SUPERADMIN &&
@@ -109,7 +112,7 @@ namespace WH.ADMIN.Controllers
             return HttpHelper.Success(message: result.Message);
         }
 
-        
+
 
 
         [HttpDelete("delete-user/{username}")]
@@ -135,6 +138,6 @@ namespace WH.ADMIN.Controllers
             return HttpHelper.Success(message: result.Message);
         }
 
-        
+
     }
 }

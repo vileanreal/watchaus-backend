@@ -1,9 +1,7 @@
 using DBHelper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using System.Net;
 using System.Net.Mime;
@@ -58,7 +56,8 @@ namespace WH.ADMIN
             // return response in camelcase
             builder.Services
             .AddMvc()
-            .AddNewtonsoftJson(options => {
+            .AddNewtonsoftJson(options =>
+            {
                 options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
             });
 
@@ -69,9 +68,9 @@ namespace WH.ADMIN
 
 
             var validateLifeTime = true;
-            #if DEBUG
-                validateLifeTime = false;
-            #endif
+#if DEBUG
+            validateLifeTime = false;
+#endif
 
             builder.Services.AddAuthentication(options =>
             {
@@ -80,7 +79,8 @@ namespace WH.ADMIN
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.Events = new JwtBearerEvents() { 
+                options.Events = new JwtBearerEvents()
+                {
                     OnTokenValidated = ValidateToken,
                     OnChallenge = SendCustomResponse
                 };
@@ -127,13 +127,14 @@ namespace WH.ADMIN
 
         private static Task SendCustomResponse(JwtBearerChallengeContext context)
         {
-            if (context.AuthenticateFailure?.Message == "Error on validating token.") {
+            if (context.AuthenticateFailure?.Message == "Error on validating token.")
+            {
                 context.HandleResponse();
                 context.HttpContext.Response.ContentType = "application/json";
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.HttpContext.Response.WriteAsync(JsonConvert.SerializeObject(OperationResult.Failed($"An internal error occured. {context.AuthenticateFailure?.Message}")));
             }
-            
+
             return Task.CompletedTask;
         }
 
@@ -141,7 +142,8 @@ namespace WH.ADMIN
         {
             Session session = new Session(context.Principal);
 
-            try {
+            try
+            {
                 var service = new UserService();
                 var user = service.GetUserDetails(session.Username);
 
@@ -156,7 +158,8 @@ namespace WH.ADMIN
                 identity?.AddClaim(new Claim("roleId", user.RoleId?.ToString() ?? ""));
                 identity?.AddClaim(new Claim("roleName", user.RoleName ?? ""));
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Log.Error("An internal error occured. {Exception}", ex);
                 context.Fail("Error on validating token.");
             }

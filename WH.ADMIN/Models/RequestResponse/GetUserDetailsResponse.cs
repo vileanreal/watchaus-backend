@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Asn1.Ocsp;
-using WH.ADMIN.Models.Entities;
+﻿using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.Models.RequestResponse
 {
@@ -17,7 +16,8 @@ namespace WH.ADMIN.Models.RequestResponse
         public long? RoleId { get; set; }
         public string RoleName { get; set; }
 
-        public GetUserDetailsResponse(User user) {
+        public GetUserDetailsResponse(User user)
+        {
             this.UserId = user.UserId;
             this.Username = user.Username;
             this.FirstName = user.FirstName;

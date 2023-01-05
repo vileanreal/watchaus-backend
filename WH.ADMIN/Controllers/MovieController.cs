@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Utilities;
 using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
@@ -30,7 +29,8 @@ namespace WH.ADMIN.Controllers
 
         [HttpGet("get-movie-details/{movieId}")]
         [ProducesDefaultResponseType(typeof(GetMovieDetailsResponse))]
-        public IActionResult GetMovieDetails(long movieId) {
+        public IActionResult GetMovieDetails(long movieId)
+        {
             MovieService service = new MovieService();
             var movie = service.GetMovieDetails(movieId);
             var response = new GetMovieDetailsResponse(movie);
@@ -49,7 +49,8 @@ namespace WH.ADMIN.Controllers
 
 
         [HttpPost("add-movie")]
-        public IActionResult AddMovie([FromBody] AddMovieRequest request) {
+        public IActionResult AddMovie([FromBody] AddMovieRequest request)
+        {
             Session session = new Session(HttpContext.User);
 
             if (session.RoleId != Roles.SUPERADMIN &&
@@ -61,7 +62,8 @@ namespace WH.ADMIN.Controllers
             MovieService service = new MovieService();
             var result = service.AddMovie(new Movies(request), session);
 
-            if (!result.IsSuccess) {
+            if (!result.IsSuccess)
+            {
                 return HttpHelper.Failed(result.Message);
             }
 
@@ -70,7 +72,8 @@ namespace WH.ADMIN.Controllers
 
 
         [HttpPut("update-movie")]
-        public IActionResult UpdateMovie([FromBody] UpdateMovieRequest request) {
+        public IActionResult UpdateMovie([FromBody] UpdateMovieRequest request)
+        {
             Session session = new Session(HttpContext.User);
 
             if (session.RoleId != Roles.SUPERADMIN &&
@@ -91,7 +94,8 @@ namespace WH.ADMIN.Controllers
         }
 
         [HttpDelete("delete-movie/{movieId}")]
-        public IActionResult DeleteMovie(long movieId) {
+        public IActionResult DeleteMovie(long movieId)
+        {
             Session session = new Session(HttpContext.User);
 
             if (session.RoleId != Roles.SUPERADMIN &&
@@ -117,7 +121,8 @@ namespace WH.ADMIN.Controllers
             Session session = new Session(HttpContext.User);
 
             if (session.RoleId != Roles.SUPERADMIN &&
-                session.RoleId != Roles.ADMIN) {
+                session.RoleId != Roles.ADMIN)
+            {
                 return HttpHelper.Failed(401, ResponseMessages.ONLY_AN_ADMIN_CAN_PERFORM_THIS_ACTION);
             }
 

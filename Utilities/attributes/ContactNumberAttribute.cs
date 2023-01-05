@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Utilities.attributes
 {
@@ -24,7 +19,7 @@ namespace Utilities.attributes
                 return true;
             }
 
-            string contactNumber = value as string;
+            string? contactNumber = value as string;
             if (contactNumber == null)
             {
                 return false;

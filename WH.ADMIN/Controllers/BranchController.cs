@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Utilities;
 using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
@@ -30,7 +28,7 @@ namespace WH.ADMIN.Controllers
             return HttpHelper.Success(response);
         }
 
-        
+
         [HttpPost("add-branch")]
         public IActionResult AddBranch([FromBody] AddBranchRequest request)
         {
@@ -104,7 +102,7 @@ namespace WH.ADMIN.Controllers
         }
 
 
- 
+
 
     }
 }

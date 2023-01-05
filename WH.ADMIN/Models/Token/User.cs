@@ -10,7 +10,8 @@ namespace WH.ADMIN.Models.Token
         public string RoleName { get; set; }
         public string Email { get; set; }
 
-        public UserDetails(User user) {
+        public UserDetails(User user)
+        {
             UserId = user.UserId.ToString() ?? "";
             Username = user.Username ?? "";
             RoleId = user.RoleId?.ToString() ?? "";

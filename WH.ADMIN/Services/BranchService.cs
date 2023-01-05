@@ -52,7 +52,8 @@ namespace WH.ADMIN.Services
             manager.InsertBranch(branch);
 
             var commonService = new CommonService();
-            commonService.InsertAuditTrailLogs(new AuditTrails() { 
+            commonService.InsertAuditTrailLogs(new AuditTrails()
+            {
                 UserId = session.Id,
                 Description = $"Added new branch: {branch.Name}"
             });
@@ -75,7 +76,7 @@ namespace WH.ADMIN.Services
             manager.UpdateBranch(branch);
 
             var commonService = new CommonService();
-            commonService.InsertAuditTrailLogs(new AuditTrails() 
+            commonService.InsertAuditTrailLogs(new AuditTrails()
             {
                 UserId = session.Id,
                 Description = $"Updated branch id: {branch.BranchId}, new branch name {branch.Name}"

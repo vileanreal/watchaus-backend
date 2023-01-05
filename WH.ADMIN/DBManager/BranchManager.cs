@@ -4,7 +4,7 @@ using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.DBManager
 {
-    public class BranchManager: BaseManager
+    public class BranchManager : BaseManager
     {
         #region SELECT
         public Branch SelectBranch(string col, string val)
@@ -24,7 +24,8 @@ namespace WH.ADMIN.DBManager
         #endregion
 
         #region INSERT
-        public void InsertBranch(Branch branch) {
+        public void InsertBranch(Branch branch)
+        {
             string sql = @"INSERT INTO BRANCHES (name,status) 
                                          VALUES (@name,@status)";
             AddParameter("@name", branch.Name);

@@ -1,11 +1,10 @@
 ﻿using DBHelper;
-using System.Security.Cryptography.X509Certificates;
 using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.DBManager
 {
-    public class ScreenManager: BaseManager
+    public class ScreenManager : BaseManager
     {
         #region SELECT
         public Screens SelectScreen(string col, string val)
@@ -31,7 +30,8 @@ namespace WH.ADMIN.DBManager
             return SelectList<Screens>(sql);
         }
 
-        public List<ScreensShowTimes> SelectShowTimes(long screenId) {
+        public List<ScreensShowTimes> SelectShowTimes(long screenId)
+        {
             string sql = @"SELECT 
                            showtime_id,
                            screen_id,
@@ -102,7 +102,8 @@ namespace WH.ADMIN.DBManager
 
 
         #region UPDATE
-        public void UpdateScreen(Screens screen) {
+        public void UpdateScreen(Screens screen)
+        {
             string sql = @"UPDATE SCREENS SET
                            branch_id = @branch_id,
                            screen_name = @screen_name,
@@ -118,7 +119,8 @@ namespace WH.ADMIN.DBManager
             return;
         }
 
-        public void UpdateScreenStatus(long screenId, string status) {
+        public void UpdateScreenStatus(long screenId, string status)
+        {
             string sql = @"UPDATE SCREENS SET status = @status WHERE screen_id = @screen_id";
             AddParameter("@screen_id", screenId);
             AddParameter("@status", status);
@@ -126,7 +128,8 @@ namespace WH.ADMIN.DBManager
             return;
         }
 
-        public void UpdateAssignedMovieStatus(long movieId, long screenId, string status) {
+        public void UpdateAssignedMovieStatus(long movieId, long screenId, string status)
+        {
             string sql = @"UPDATE SCREENS_ASSIGNED_MOVIES SET status = @status WHERE movie_id = @movie_id AND screen_id = @screen_id";
             AddParameter("@movie_id", movieId);
             AddParameter("@screen_id", screenId);

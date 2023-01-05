@@ -1,9 +1,4 @@
 ﻿using Renci.SshNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utilities
 {
@@ -185,9 +180,12 @@ namespace Utilities
 
             byte[] data = null;
 
-            try {
+            try
+            {
                 data = Convert.FromBase64String(base64);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return false;
             }
 

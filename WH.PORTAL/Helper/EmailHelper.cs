@@ -1,7 +1,7 @@
-﻿using System.Net.Mail;
-using System.Net;
-using WH.PORTAL.Services;
+﻿using System.Net;
+using System.Net.Mail;
 using WH.PORTAL.Models.Entities;
+using WH.PORTAL.Services;
 
 namespace WH.PORTAL.Helper
 {
@@ -10,12 +10,14 @@ namespace WH.PORTAL.Helper
         private SmtpClient Client { get; set; }
         private SmtpSetting Setting { get; set; }
 
-        public EmailHelper() {
+        public EmailHelper()
+        {
             SmtpService service = new SmtpService();
-            
+
             Setting = service.GetSmtpSetting("CUSTOMER");
-            
-            if (Setting == null) {
+
+            if (Setting == null)
+            {
                 throw new Exception("No defined smtp setting for customer.");
             }
 

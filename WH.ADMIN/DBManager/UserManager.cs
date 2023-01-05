@@ -1,11 +1,10 @@
 ﻿using DBHelper;
-using Serilog;
 using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.DBManager
 {
-    public class UserManager: BaseManager
+    public class UserManager : BaseManager
     {
 
         #region SELECT
@@ -44,7 +43,7 @@ namespace WH.ADMIN.DBManager
                                        VALUES(@username, @password, @first_name, @middle_name, @last_name, @email, @phone_no, @branch_id, @role_id, @status)";
             AddParameter("@username", user.Username);
             AddParameter("@password", user.Password);
-            AddParameter("@first_name",user.FirstName);
+            AddParameter("@first_name", user.FirstName);
             AddParameter("@middle_name", user.MiddleName);
             AddParameter("@last_name", user.LastName);
             AddParameter("@email", user.Email);
@@ -57,7 +56,8 @@ namespace WH.ADMIN.DBManager
         }
 
 
-        public long InsertSecurityLogs(UsersSercurityLogs log) {
+        public long InsertSecurityLogs(UsersSercurityLogs log)
+        {
             string sql = @"INSERT INTO USERS_SECURITY_LOGS (user_id, log_date, description, status) 
                                                      VALUES(@user_id, NOW(), @description, @status)";
             AddParameter("@user_id", log.UserId);

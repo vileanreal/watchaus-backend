@@ -1,13 +1,8 @@
-﻿using Serilog.Configuration;
+﻿using Serilog;
+using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
-using Serilog;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utilities.SeriLog
 {

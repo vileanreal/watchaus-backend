@@ -3,7 +3,7 @@ using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.DBManager
 {
-    public class SmtpManager: BaseManager
+    public class SmtpManager : BaseManager
     {
 
         #region SELECT
@@ -17,7 +17,7 @@ namespace WH.ADMIN.DBManager
         #endregion
 
         #region INSERT
-       
+
         #endregion
 
         #region UPDATE

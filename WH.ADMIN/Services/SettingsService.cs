@@ -1,6 +1,6 @@
-﻿using WH.ADMIN.Models.Entities;
+﻿using Utilities;
 using WH.ADMIN.DBManager;
-using Utilities;
+using WH.ADMIN.Models.Entities;
 using WH.PORTAL.Services;
 
 namespace WH.ADMIN.Services
@@ -26,7 +26,7 @@ namespace WH.ADMIN.Services
             {
                 manager.UpdateSetting(setting.SettingCode, setting.SettingVal);
                 code_values += $"{(code_values.Equals("") ? "" : ", ")}{setting.SettingCode} = {setting.SettingVal}";
-                
+
             }
 
             commonService.InsertAuditTrailLogs(new AuditTrails()

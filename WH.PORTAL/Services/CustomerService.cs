@@ -15,7 +15,8 @@ namespace WH.PORTAL.Services
             return customer != null;
         }
 
-        public bool IsValidVerificationLink(long customerId, string linkCode) {
+        public bool IsValidVerificationLink(long customerId, string linkCode)
+        {
             using CustomerManager manager = new CustomerManager();
             var cvl = manager.SelectCustomerVerificationLink(customerId, linkCode);
             return cvl != null;
@@ -35,7 +36,8 @@ namespace WH.PORTAL.Services
             manager.BeginTransaction();
             var customerId = manager.InsertCustomer(customer);
 
-            var verificationLink = new CustomersVerificationLink() {
+            var verificationLink = new CustomersVerificationLink()
+            {
                 CustomerId = customerId,
                 LinkCode = CommonHelper.GenerateEmailVerificationCode(),
                 Purpose = "Registration",
@@ -52,7 +54,7 @@ namespace WH.PORTAL.Services
                                                      .Replace("<link_code>", verificationLink.LinkCode.ToString());
             var subject = emailTemplate.Subject;
             var body = emailTemplate.Body.Replace("<confirmation_email_link>", confirmationLink);
-            
+
             EmailHelper emailHelper = new EmailHelper();
             emailHelper.SendEmail(customer.Email, subject, body);
 
@@ -64,8 +66,9 @@ namespace WH.PORTAL.Services
         }
 
 
-        public OperationResult ConfirmEmail(long customerId, string linkCode) {
-            
+        public OperationResult ConfirmEmail(long customerId, string linkCode)
+        {
+
             if (!IsValidVerificationLink(customerId, linkCode))
             {
                 return OperationResult.Failed("Invalid Link Code.");

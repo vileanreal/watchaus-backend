@@ -17,8 +17,8 @@ namespace WH.ADMIN.Models.Entities
 
         public I_Settings(UpdateSettingRequestList request)
         {
-             SettingCode = request.SettingCode;
-             SettingVal = request.SettingVal;
+            SettingCode = request.SettingCode;
+            SettingVal = request.SettingVal;
         }
     }
 }

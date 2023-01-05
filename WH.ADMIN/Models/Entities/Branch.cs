@@ -20,7 +20,7 @@ namespace WH.ADMIN.Models.Entities
             this.BranchId = request.BranchId ?? 0;
             this.Name = request.Name;
         }
-       
+
     }
 
 

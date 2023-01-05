@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Utilities;
+﻿using Utilities;
 using WH.ADMIN.DBManager;
 using WH.ADMIN.Models;
 using WH.ADMIN.Models.Entities;
@@ -10,27 +9,32 @@ namespace WH.ADMIN.Services
     public class MovieService
     {
 
-        public List<I_Genres> GetGenreList() {
+        public List<I_Genres> GetGenreList()
+        {
             using var manager = new MovieManager();
             return manager.SelectMovieGenreList();
         }
 
-        public List<Movies> GetMovieList() {
+        public List<Movies> GetMovieList()
+        {
             using var manager = new MovieManager();
             return manager.SelectMovieList();
         }
 
-        public Movies GetMovieById(long movieId) { 
+        public Movies GetMovieById(long movieId)
+        {
             using var manager = new MovieManager();
             return manager.SelectMovie("movie_id", movieId.ToString());
         }
 
-        public bool IsMovieExist(long movieId) { 
+        public bool IsMovieExist(long movieId)
+        {
             var movie = GetMovieById(movieId);
             return movie != null;
         }
 
-        public OperationResult AddMovie(Movies movie, Session session) {
+        public OperationResult AddMovie(Movies movie, Session session)
+        {
             var commonService = new CommonService();
 
             var settings = new Settings(commonService.GetSettings());
@@ -38,7 +42,8 @@ namespace WH.ADMIN.Services
             foreach (var item in movie.ImageList)
             {
                 var isValidBase64 = ImageHelper.IsBase64Image(item.Base64Img, out var fileExtension);
-                if (!isValidBase64) {
+                if (!isValidBase64)
+                {
                     return OperationResult.Failed("Base64 is not valid.");
                 }
                 item.FileExtension = fileExtension;
@@ -63,9 +68,9 @@ namespace WH.ADMIN.Services
                 item.MovieId = movieId;
                 var path = Path.Combine(settings.ImgFilePath, $"MI{item.MovieId}.{item.FileExtension}");
                 path = ImageHelper.SaveBase64Image(item.Base64Img, path,
-                                                   settings.ImgFileHost, 
-                                                   settings.ImgFilePort, 
-                                                   settings.ImgFileUsername, 
+                                                   settings.ImgFileHost,
+                                                   settings.ImgFilePort,
+                                                   settings.ImgFileUsername,
                                                    settings.ImgFilePassword);
                 item.Path = Path.GetFileName(path);
                 var imageId = manager.InsertMovieImages(item);
@@ -89,11 +94,13 @@ namespace WH.ADMIN.Services
             return OperationResult.Success("Movie added successfully.");
         }
 
-        public OperationResult UpdateMovie(Movies movie, Session session) { 
+        public OperationResult UpdateMovie(Movies movie, Session session)
+        {
             var commonService = new CommonService();
 
-            
-            if (!IsMovieExist(movie.MovieId)) {
+
+            if (!IsMovieExist(movie.MovieId))
+            {
                 return OperationResult.Failed("Movie doesn't exist.");
             }
 
@@ -119,7 +126,8 @@ namespace WH.ADMIN.Services
         }
 
 
-        public OperationResult DeleteMovie(long movieId, Session session) {
+        public OperationResult DeleteMovie(long movieId, Session session)
+        {
             var commonService = new CommonService();
 
             if (!IsMovieExist(movieId))
@@ -157,14 +165,14 @@ namespace WH.ADMIN.Services
             }
 
             var isValidBase64 = ImageHelper.IsBase64Image(base64, out var fileExtension);
-            
+
             if (!isValidBase64)
             {
                 return OperationResult.Failed("Base64 is not valid.");
             }
 
             var path = Path.Combine(settings.ImgFilePath, $"MI{movieId}.{fileExtension}");
-            
+
             path = ImageHelper.SaveBase64Image(base64, path,
                                                settings.ImgFileHost,
                                                settings.ImgFilePort,
@@ -189,15 +197,18 @@ namespace WH.ADMIN.Services
 
 
 
-        public Movies GetMovieDetails(long movieId) {
+        public Movies GetMovieDetails(long movieId)
+        {
 
             var movie = GetMovieById(movieId);
 
-            if (movie == null) {
+            if (movie == null)
+            {
                 return null;
             }
 
-            using (var manager = new MovieManager()) {
+            using (var manager = new MovieManager())
+            {
                 movie.GenreList = manager.SelectMovieGenre(movieId);
                 movie.ImageList = manager.SelectMovieImages(movieId);
                 movie.ScheduleList = manager.SelectMovieSchedule(movieId);
@@ -206,7 +217,8 @@ namespace WH.ADMIN.Services
             var commonService = new CommonService();
             var settings = new Settings(commonService.GetSettings());
 
-            foreach (var item in movie.ImageList) {
+            foreach (var item in movie.ImageList)
+            {
                 var filePath = Path.Combine(settings.ImgFilePath, item.Path);
                 item.Base64Img = ImageHelper.GetBase64Image(filePath,
                                                             settings.ImgFileHost,

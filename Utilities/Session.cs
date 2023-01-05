@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 
 namespace Utilities
 {
@@ -16,7 +11,8 @@ namespace Utilities
         public string Email { get; set; }
 
         // Pass HttpContext.User
-        public Session(ClaimsPrincipal principal) {
+        public Session(ClaimsPrincipal principal)
+        {
             IEnumerable<Claim> claims = principal.Claims;
             foreach (Claim claim in claims)
             {

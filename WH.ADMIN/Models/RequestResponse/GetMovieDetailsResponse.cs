@@ -25,31 +25,36 @@ namespace WH.ADMIN.Models.RequestResponse
                 GenreId = x.GenreId,
                 Name = x.Name,
             }).ToList();
-            this.Schedules = movie.ScheduleList.Select(x => new MovieScheduleResponse() { 
+            this.Schedules = movie.ScheduleList.Select(x => new MovieScheduleResponse()
+            {
                 ShowingDateStart = x.DateStart,
                 ShowingDateEnd = x.DateEnd
             }).ToList();
             this.MoviePosterBase64 = movie.ImageList.Find(x => x.IsMoviePoster)?.Base64Img ?? "";
-            this.Screenshots = movie.ImageList.FindAll(x => !x.IsMoviePoster).Select(x => new MovieScreenshotsResponse() { 
+            this.Screenshots = movie.ImageList.FindAll(x => !x.IsMoviePoster).Select(x => new MovieScreenshotsResponse()
+            {
                 ImageId = x.ImageId,
                 ImageBase64 = x.Base64Img
             }).ToList();
-            
+
         }
     }
 
 
-    public class MovieGenreResponse { 
+    public class MovieGenreResponse
+    {
         public long GenreId { get; set; }
         public string Name { get; set; }
     }
 
-    public class MovieScheduleResponse {
+    public class MovieScheduleResponse
+    {
         public string ShowingDateStart { get; set; }
         public string ShowingDateEnd { get; set; }
     }
 
-    public class MovieScreenshotsResponse { 
+    public class MovieScreenshotsResponse
+    {
         public long ImageId { get; set; }
         public string ImageBase64 { get; set; }
     }

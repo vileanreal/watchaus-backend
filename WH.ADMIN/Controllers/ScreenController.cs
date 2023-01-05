@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Utilities;
-using WH.ADMIN.DBManager;
 using WH.ADMIN.Models.Entities;
 using WH.ADMIN.Models.RequestResponse;
 using WH.ADMIN.Services;
@@ -18,11 +15,13 @@ namespace WH.ADMIN.Controllers
     public class ScreenController : ControllerBase
     {
         [HttpGet("get-screen-details/{screenId}")]
-        public IActionResult GetScreenDetails(long screenId) { 
+        public IActionResult GetScreenDetails(long screenId)
+        {
             ScreenService service = new ScreenService();
             var result = service.GetScreenDetails(screenId);
 
-            if (result == null) {
+            if (result == null)
+            {
                 return HttpHelper.Failed("Screen doesn't exist.");
             }
 
@@ -31,7 +30,8 @@ namespace WH.ADMIN.Controllers
         }
 
         [HttpGet("get-screen-list/{branchId}")]
-        public IActionResult GetScreenList(long branchId) {
+        public IActionResult GetScreenList(long branchId)
+        {
             ScreenService service = new ScreenService();
             var result = service.GetScreenList(branchId);
             var response = result?.Select(x => new GetScreenListResponse(x)).ToList();
@@ -39,16 +39,18 @@ namespace WH.ADMIN.Controllers
         }
 
         [HttpGet("get-assigned-movie-list/{screenId}")]
-        public IActionResult GetAssignedMovieList(long screenId) { 
+        public IActionResult GetAssignedMovieList(long screenId)
+        {
             ScreenService screenService = new ScreenService();
             MovieService movieService = new MovieService();
 
             var result = screenService.GetAssignedMovieList(screenId);
             var response = new List<GetAssignedMovieListResponse>();
 
-            foreach (var item in result) {
+            foreach (var item in result)
+            {
                 var movieDetails = movieService.GetMovieDetails(item.MovieId);
-                
+
                 response.Add(new GetAssignedMovieListResponse()
                 {
                     SamId = item.SamId,
@@ -70,7 +72,8 @@ namespace WH.ADMIN.Controllers
             ScreenService service = new ScreenService();
             var result = service.AddScreen(new Screens(request), session);
 
-            if (!result.IsSuccess) {
+            if (!result.IsSuccess)
+            {
                 return HttpHelper.Failed(result.Message);
             }
 
@@ -78,7 +81,8 @@ namespace WH.ADMIN.Controllers
         }
 
         [HttpPut("update-screen")]
-        public IActionResult UpdateScreen(UpdateScreenRequest request) {
+        public IActionResult UpdateScreen(UpdateScreenRequest request)
+        {
             Session session = new Session(HttpContext.User);
             ScreenService service = new ScreenService();
             var result = service.UpdateScreen(new Screens(request), session);
@@ -98,7 +102,7 @@ namespace WH.ADMIN.Controllers
             Session session = new Session(HttpContext.User);
             ScreenService service = new ScreenService();
             var result = service.DeleteScreen(screenId, session);
-            
+
             if (!result.IsSuccess)
             {
                 return HttpHelper.Failed(result.Message);
@@ -109,7 +113,8 @@ namespace WH.ADMIN.Controllers
 
 
         [HttpPost("assign-movie-to-screen")]
-        public IActionResult AssignMovieToScreen([FromBody] AssignMovieToScreenRequest request) {
+        public IActionResult AssignMovieToScreen([FromBody] AssignMovieToScreenRequest request)
+        {
             Session session = new Session(HttpContext.User);
 
             ScreenService service = new ScreenService();
@@ -124,7 +129,8 @@ namespace WH.ADMIN.Controllers
         }
 
         [HttpDelete("delete-assigned-movie")]
-        public IActionResult DeleteAssignedMovie([FromBody] DeleteAssignedMovieRequest request) {
+        public IActionResult DeleteAssignedMovie([FromBody] DeleteAssignedMovieRequest request)
+        {
             Session session = new Session(HttpContext.User);
 
             ScreenService service = new ScreenService();

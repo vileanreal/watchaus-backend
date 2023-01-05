@@ -3,11 +3,12 @@ using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.DBManager
 {
-    public class CommonManager: BaseManager
+    public class CommonManager : BaseManager
     {
         #region SELECT
 
-        public Dictionary<string,string> SelectAllSettings() {
+        public Dictionary<string, string> SelectAllSettings()
+        {
             string sql = @$"SELECT * FROM I_SETTINGS";
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             using var reader = ExecuteReader(sql);
@@ -37,7 +38,8 @@ namespace WH.ADMIN.DBManager
 
         #region INSERT
 
-        public void InsertAuditTrails(AuditTrails audit) {
+        public void InsertAuditTrails(AuditTrails audit)
+        {
             string sql = @"INSERT INTO AUDIT_TRAILS (user_id, log_date, description)
                                               VALUES(@user_id, NOW(), @description)";
             AddParameter("@user_id", audit.UserId);

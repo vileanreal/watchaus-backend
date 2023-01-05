@@ -73,7 +73,8 @@ namespace DBHelper
 
 
         // EXECUTE SP
-        protected void ExecuteSp(string sp) {
+        protected void ExecuteSp(string sp)
+        {
             var result = _conn.Query(sp, _parameters, commandType: CommandType.StoredProcedure);
             ClearParameters();
         }

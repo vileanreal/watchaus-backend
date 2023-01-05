@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Utilities;
+﻿using Utilities;
 using WH.ADMIN.DBManager;
 using WH.ADMIN.Helper;
 using WH.ADMIN.Models;
@@ -11,22 +10,26 @@ namespace WH.ADMIN.Services
     public class UserService
     {
 
-        public bool IsUserExist(string username) { 
+        public bool IsUserExist(string username)
+        {
             var user = GetUserDetails(username);
             return user != null;
         }
 
-        public User GetUserDetails(string username) {
+        public User GetUserDetails(string username)
+        {
             using var manager = new UserManager();
             return manager.SelectUser("username", username);
         }
 
-        public OperationResult AddUser(User user, Session session) {
+        public OperationResult AddUser(User user, Session session)
+        {
 
             var branchService = new BranchService();
 
             if (user.RoleId == Roles.OPERATOR &&
-                (user.BranchId == null || user.BranchId == 0)) {
+                (user.BranchId == null || user.BranchId == 0))
+            {
                 return OperationResult.Failed("BranchId is required if role is Operator.");
             }
 
@@ -35,7 +38,7 @@ namespace WH.ADMIN.Services
                 return OperationResult.Failed("Username already exist.");
             }
 
-            if (user.BranchId != null && user.BranchId != 0 && 
+            if (user.BranchId != null && user.BranchId != 0 &&
                 !branchService.IsBranchExist(user.BranchId ?? 0))
             {
                 return OperationResult.Failed("Branch doesn't exist.");
@@ -45,7 +48,8 @@ namespace WH.ADMIN.Services
 
             user.Password = CryptoHelper.Encrypt(password);
 
-            var logDescription = new UsersSercurityLogs() {
+            var logDescription = new UsersSercurityLogs()
+            {
                 UserId = session.Id,
                 Description = $"Added new user: {user.Username}",
                 Status = Status.SUCCESS
@@ -72,7 +76,8 @@ namespace WH.ADMIN.Services
         }
 
 
-        public OperationResult UpdateUser(User user, Session session) {
+        public OperationResult UpdateUser(User user, Session session)
+        {
 
             var branchService = new BranchService();
 
@@ -111,12 +116,14 @@ namespace WH.ADMIN.Services
         }
 
 
-        public List<User> GetUserList() {
+        public List<User> GetUserList()
+        {
             using var manager = new UserManager();
             return manager.SelectActiveUsers();
         }
 
-        public OperationResult DeleteUser(string username, Session session) {
+        public OperationResult DeleteUser(string username, Session session)
+        {
 
             var user = GetUserDetails(username);
 
@@ -136,7 +143,7 @@ namespace WH.ADMIN.Services
                 Description = $"Deleted user: {username}",
                 Status = Status.SUCCESS
             };
-            
+
             using UserManager userManager = new UserManager();
             userManager.BeginTransaction();
             userManager.UpdateUserStatus(username, Status.DELETED);

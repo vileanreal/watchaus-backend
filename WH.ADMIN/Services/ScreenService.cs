@@ -10,30 +10,35 @@ namespace WH.ADMIN.Services
     {
 
 
-        public bool IsScreenExist(long screenId) {
+        public bool IsScreenExist(long screenId)
+        {
             using var manager = new ScreenManager();
             var screen = manager.SelectScreen("screen_id", screenId.ToString());
             return screen != null;
         }
 
 
-        public bool IsMovieAlreadyAssignedToScreen(long movieId, long screenId) {
+        public bool IsMovieAlreadyAssignedToScreen(long movieId, long screenId)
+        {
             using var manager = new ScreenManager();
             var screen = manager.SelectAssignedMovie(screenId, movieId);
             return screen != null;
         }
 
-        public Screens GetScreenDetails(long screenId) {
+        public Screens GetScreenDetails(long screenId)
+        {
             using var manager = new ScreenManager();
             var screen = manager.SelectScreen("screen_id", screenId.ToString());
-            if (screen == null) {
+            if (screen == null)
+            {
                 return null;
             }
             screen.ShowTimesList = manager.SelectShowTimes(screenId);
             return screen;
         }
 
-        public List<Screens> GetScreenList(long branchId) {
+        public List<Screens> GetScreenList(long branchId)
+        {
             using var manager = new ScreenManager();
             var screenList = manager.SelectScreenList(branchId);
             return screenList;
@@ -47,15 +52,18 @@ namespace WH.ADMIN.Services
             return movieList;
         }
 
-        public OperationResult AddScreen(Screens screen, Session session) {
+        public OperationResult AddScreen(Screens screen, Session session)
+        {
 
             BranchService branchService = new BranchService();
-            
-            if (!branchService.IsBranchExist(screen.BranchId)) {
+
+            if (!branchService.IsBranchExist(screen.BranchId))
+            {
                 return OperationResult.Failed("Branch doesn't exist.");
             }
 
-            foreach (var item in screen.ShowTimesList) {
+            foreach (var item in screen.ShowTimesList)
+            {
                 if (!CommonHelper.IsMilitaryTime(item.TimeStart))
                 {
                     return OperationResult.Failed("Time should be in military time format.");
@@ -65,13 +73,15 @@ namespace WH.ADMIN.Services
             using ScreenManager screenManager = new ScreenManager();
             screenManager.BeginTransaction();
             var screenId = screenManager.InsertScreen(screen);
-            foreach (var item in screen.ShowTimesList) { 
+            foreach (var item in screen.ShowTimesList)
+            {
                 item.ScreenId = screenId;
                 screenManager.InsertShowTimes(item);
             }
 
             CommonService commonService = new CommonService();
-            commonService.InsertAuditTrailLogs(new AuditTrails() { 
+            commonService.InsertAuditTrailLogs(new AuditTrails()
+            {
                 UserId = session.Id,
                 Description = $"Added new screen: {screen.ScreenName}, to branch: {screen.BranchId}"
             });
@@ -82,10 +92,12 @@ namespace WH.ADMIN.Services
         }
 
 
-        public OperationResult UpdateScreen(Screens screen, Session session) {
+        public OperationResult UpdateScreen(Screens screen, Session session)
+        {
             BranchService branchService = new BranchService();
 
-            if (!IsScreenExist(screen.ScreenId)) {
+            if (!IsScreenExist(screen.ScreenId))
+            {
                 return OperationResult.Failed("Screen doesn't exist");
             }
 
@@ -138,7 +150,7 @@ namespace WH.ADMIN.Services
             using ScreenManager screenManager = new ScreenManager();
             screenManager.BeginTransaction();
             screenManager.UpdateScreenStatus(screenId, Status.DELETED);
-            
+
             CommonService commonService = new CommonService();
             commonService.InsertAuditTrailLogs(new AuditTrails()
             {
@@ -212,9 +224,9 @@ namespace WH.ADMIN.Services
 
             using var screenManager = new ScreenManager();
             screenManager.BeginTransaction();
-            
+
             screenManager.UpdateAssignedMovieStatus(assignedMovie.MovieId, assignedMovie.ScreenId, Status.DELETED);
-            
+
             CommonService commonService = new CommonService();
             commonService.InsertAuditTrailLogs(new AuditTrails()
             {

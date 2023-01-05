@@ -7,7 +7,8 @@ namespace WH.ADMIN.Models.RequestResponse
         public long BranchId { get; set; }
         public string Name { get; set; }
 
-        public GetBranchListResponse(Branch branch) {
+        public GetBranchListResponse(Branch branch)
+        {
             this.BranchId = branch.BranchId;
             this.Name = branch.Name;
         }

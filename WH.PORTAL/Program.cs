@@ -45,7 +45,8 @@ namespace WATCHAUS
             // return response in camelcase
             builder.Services
             .AddMvc()
-            .AddNewtonsoftJson(options => {
+            .AddNewtonsoftJson(options =>
+            {
                 options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
             });
 

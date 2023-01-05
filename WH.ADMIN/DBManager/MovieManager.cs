@@ -4,7 +4,7 @@ using WH.ADMIN.Models.Entities;
 
 namespace WH.ADMIN.DBManager
 {
-    public class MovieManager: BaseManager
+    public class MovieManager : BaseManager
     {
         #region SELECT
         public List<I_Genres> SelectMovieGenreList()
@@ -28,7 +28,8 @@ namespace WH.ADMIN.DBManager
             return SelectList<Movies>(sql);
         }
 
-        public List<MoviesGenre> SelectMovieGenre(long movieId) {
+        public List<MoviesGenre> SelectMovieGenre(long movieId)
+        {
             string sql = @"SELECT 
                            mg.mg_id,
                            mg.movie_id,
@@ -41,14 +42,16 @@ namespace WH.ADMIN.DBManager
             return SelectList<MoviesGenre>(sql);
         }
 
-        public List<MoviesImages> SelectMovieImages(long movieId) {
+        public List<MoviesImages> SelectMovieImages(long movieId)
+        {
             string sql = @"SELECT * FROM MOVIES_IMAGES WHERE movie_id = @movie_id";
             AddParameter("@movie_id", movieId);
             return SelectList<MoviesImages>(sql);
         }
 
 
-        public List<MoviesSchedule> SelectMovieSchedule(long movieId) {
+        public List<MoviesSchedule> SelectMovieSchedule(long movieId)
+        {
             string sql = @"SELECT 
                            schedule_id,
                            movie_id,
@@ -65,7 +68,8 @@ namespace WH.ADMIN.DBManager
         #endregion
 
         #region INSERT
-        public long InsertMovie(Movies movie) {
+        public long InsertMovie(Movies movie)
+        {
             string sql = @"INSERT INTO MOVIES (title, description, duration, status) 
                                        VALUES (@title, @description, @duration, @status)";
             AddParameter("@title", movie.Title);
@@ -76,7 +80,8 @@ namespace WH.ADMIN.DBManager
             return LastInsertedId;
         }
 
-        public long InsertMovieGenre(MoviesGenre genre) {
+        public long InsertMovieGenre(MoviesGenre genre)
+        {
             string sql = @"INSERT INTO MOVIES_GENRE (movie_id, genre_id)
                                              VALUES (@movie_id, @genre_id)";
             AddParameter("@movie_id", genre.MovieId);
@@ -96,7 +101,8 @@ namespace WH.ADMIN.DBManager
             return LastInsertedId;
         }
 
-        public long InsertMovieSchedule(MoviesSchedule schedule) {
+        public long InsertMovieSchedule(MoviesSchedule schedule)
+        {
             string sql = @"INSERT INTO MOVIES_SCHEDULE (movie_id, date_start, date_end) 
                                                 VALUES (@movie_id, @date_start, @date_end)";
             AddParameter("@movie_id", schedule.MovieId);
@@ -104,12 +110,13 @@ namespace WH.ADMIN.DBManager
             AddParameter("@date_end", schedule.DateEnd);
             ExecuteQuery(sql);
             return LastInsertedId;
-           
+
         }
         #endregion
 
         #region UPDATE
-        public void UpdateMovieStatus(long movieId, string status) {
+        public void UpdateMovieStatus(long movieId, string status)
+        {
             string sql = @"UPDATE MOVIES SET status = @status WHERE movie_id = @movie_id WHERE status = 'A'";
             AddParameter("@movie_id", movieId);
             AddParameter("@status", status);
@@ -117,7 +124,8 @@ namespace WH.ADMIN.DBManager
             return;
         }
 
-        public void UpdateMovieDetails(Movies movie) {
+        public void UpdateMovieDetails(Movies movie)
+        {
             string sql = @"UPDATE MOVIES SET 
                            title = @title,
                            description = @description,
@@ -131,7 +139,8 @@ namespace WH.ADMIN.DBManager
             return;
         }
 
-        public void UpdateMoviePoster(long movieId, string path) {
+        public void UpdateMoviePoster(long movieId, string path)
+        {
             string sql = @"UPDATE MOVIES_IMAGES SET
                            path = @path
                            WHERE movie_id = @movie_id AND is_movie_poster = 1";
@@ -144,7 +153,8 @@ namespace WH.ADMIN.DBManager
         #endregion
 
         #region DELETE
-        public void DeleteMovieGenres(long movieId) {
+        public void DeleteMovieGenres(long movieId)
+        {
             string sql = @"DELETE FROM MOVIES_GENRE WHERE movie_id = @movie_id";
             AddParameter("@movie_id", movieId);
             ExecuteQuery(sql);

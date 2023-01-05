@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace WH.ADMIN.Models.Entities
+﻿namespace WH.ADMIN.Models.Entities
 {
     public class MoviesImages
     {

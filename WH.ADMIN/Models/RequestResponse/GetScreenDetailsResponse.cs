@@ -20,7 +20,7 @@ namespace WH.ADMIN.Models.RequestResponse
             ScreenName = screen.ScreenName;
             NoOfSeats = screen.NoOfSeats;
             Charge = screen.Charge;
-            ShowTimes = screen.ShowTimesList.Select( x => x.TimeStart).ToList();
+            ShowTimes = screen.ShowTimesList.Select(x => x.TimeStart).ToList();
         }
     }
 }

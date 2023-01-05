@@ -4,16 +4,18 @@ using WH.PORTAL.Models.Entities;
 
 namespace WH.PORTAL.DBManager
 {
-    public class CustomerManager: BaseManager
+    public class CustomerManager : BaseManager
     {
         #region SELECT
-        public Customers SelectCustomer(string col,string val) {
+        public Customers SelectCustomer(string col, string val)
+        {
             string sql = @$"SELECT * FROM CUSTOMERS WHERE {col} = @Val";
             AddParameter("@Val", val);
             return SelectSingle<Customers>(sql);
         }
 
-        public CustomersVerificationLink SelectCustomerVerificationLink(long customerId, string linkCode) {
+        public CustomersVerificationLink SelectCustomerVerificationLink(long customerId, string linkCode)
+        {
             string sql = @"SELECT * FROM CUSTOMERS_VERIFICATION_LINKS
                            WHERE customer_id  = @customer_id AND link_code = @link_code AND status = @status";
             AddParameter("@customer_id", customerId);
@@ -25,7 +27,8 @@ namespace WH.PORTAL.DBManager
         #endregion
 
         #region INSERT
-        public long InsertCustomer(Customers customer) {
+        public long InsertCustomer(Customers customer)
+        {
             string sql = @"INSERT INTO CUSTOMERS (email, password, phone_no, first_name, middle_name, last_name, status) 
                                           VALUES (@email, @password, @phone_no, @first_name, @middle_name, @last_name, @status)";
             AddParameter("@email", customer.Email);
@@ -39,7 +42,8 @@ namespace WH.PORTAL.DBManager
             return LastInsertedId;
         }
 
-        public long InsertVerificationLink(CustomersVerificationLink link) {
+        public long InsertVerificationLink(CustomersVerificationLink link)
+        {
             string sql = @"INSERT INTO CUSTOMERS_VERIFICATION_LINKS (customer_id, link_code, date_created, purpose, status) 
                                                              VALUES (@customerId, @linkCode, NOW(), @purpose, @status)";
             AddParameter("@customerId", link.CustomerId);

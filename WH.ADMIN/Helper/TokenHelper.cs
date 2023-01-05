@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,7 +14,8 @@ namespace WH.ADMIN.Helper
         public static string Key { get; set; }
 
 
-        public static string GenerateToken(UserDetails user) { 
+        public static string GenerateToken(UserDetails user)
+        {
             var issuer = Issuer;
             var audience = Audience;
             var key = Encoding.ASCII.GetBytes(Key);
@@ -36,7 +36,7 @@ namespace WH.ADMIN.Helper
                 Expires = DateTime.UtcNow.AddMinutes(5),
                 Issuer = issuer,
                 Audience = audience,
-                SigningCredentials = new SigningCredentials (new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);

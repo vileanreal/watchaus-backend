@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using WH.ADMIN.Models.RequestResponse;
+﻿using WH.ADMIN.Models.RequestResponse;
 
 namespace WH.ADMIN.Models.Entities
 {

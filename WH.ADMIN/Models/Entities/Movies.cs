@@ -16,22 +16,26 @@ namespace WH.ADMIN.Models.Entities
 
         public Movies() { }
 
-        public Movies(AddMovieRequest request) {
+        public Movies(AddMovieRequest request)
+        {
             this.Title = request.Title;
             this.Description = request.Description;
             this.Duration = request.Duration;
-            
-            this.GenreList = request.Genres.Select(item => new MoviesGenre() { 
+
+            this.GenreList = request.Genres.Select(item => new MoviesGenre()
+            {
                 GenreId = item
             }).ToList();
-            
-            this.ImageList = request.Screenshots.Select(item => new MoviesImages() { 
+
+            this.ImageList = request.Screenshots.Select(item => new MoviesImages()
+            {
                 Base64Img = item,
                 IsMoviePoster = false
-              
+
             }).ToList();
-            
-            this.ImageList.Add(new MoviesImages() { 
+
+            this.ImageList.Add(new MoviesImages()
+            {
                 Base64Img = request.MoviePosterImg,
                 IsMoviePoster = true
             });
