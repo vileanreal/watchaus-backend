@@ -31,7 +31,6 @@ namespace WH.ADMIN.DBManager
             AddParameter("@name", branch.Name);
             AddParameter("@status", "A");
             ExecuteQuery(sql);
-            return;
         }
         #endregion
 

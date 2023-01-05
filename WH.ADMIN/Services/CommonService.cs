@@ -1,4 +1,5 @@
-﻿using WH.ADMIN.DBManager;
+﻿using Utilities.Exceptions;
+using WH.ADMIN.DBManager;
 using WH.ADMIN.Models.Entities;
 
 namespace WH.PORTAL.Services
@@ -18,7 +19,7 @@ namespace WH.PORTAL.Services
             var setting = manager.SelectSetting(settingCode);
             if (setting == null)
             {
-                throw new Exception("Setting doesn't exist");
+                throw new NullResultException("Setting doesn't exist");
             }
             return setting;
         }
@@ -29,7 +30,7 @@ namespace WH.PORTAL.Services
             var template = manager.SelectEmailTemplate(templateName);
             if (template == null)
             {
-                throw new Exception("Template doesn't exist");
+                throw new NullResultException("Template doesn't exist");
             }
             return template;
         }
@@ -39,7 +40,6 @@ namespace WH.PORTAL.Services
         {
             using var manager = new CommonManager();
             manager.InsertAuditTrails(audit);
-            return;
         }
     }
 }

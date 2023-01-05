@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using Utilities.Exceptions;
 using WH.ADMIN.Models.Entities;
 using WH.ADMIN.Services;
 
@@ -17,7 +18,7 @@ namespace WH.ADMIN.Helper
 
             if (Setting == null)
             {
-                throw new Exception("No defined smtp setting for internal users.");
+                throw new NullResultException("No defined smtp setting for internal users.");
             }
 
             Client = new SmtpClient

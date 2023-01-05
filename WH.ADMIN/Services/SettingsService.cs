@@ -17,22 +17,19 @@ namespace WH.ADMIN.Services
         public OperationResult UpdateSettings(List<I_Settings> settingList, Session session)
         {
             var commonService = new CommonService();
-
-            var settings = new Settings(commonService.GetSettings());
             using var manager = new SettingManager();
             manager.BeginTransaction();
-            var code_values = "";
+            var settings = new List<string>();
             foreach (var setting in settingList)
             {
                 manager.UpdateSetting(setting.SettingCode, setting.SettingVal);
-                code_values += $"{(code_values.Equals("") ? "" : ", ")}{setting.SettingCode} = {setting.SettingVal}";
-
+                settings.Add($"{setting.SettingCode} = {setting.SettingVal}");
             }
 
             commonService.InsertAuditTrailLogs(new AuditTrails()
             {
                 UserId = session.Id,
-                Description = $"Updated settings: {code_values}"
+                Description = $"Updated settings: {string.Join(", ", settings)}"
             });
             manager.Commit();
             return OperationResult.Success("Settings updated successfully");

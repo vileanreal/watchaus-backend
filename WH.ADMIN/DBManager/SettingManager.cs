@@ -22,7 +22,6 @@ namespace WH.ADMIN.DBManager
             AddParameter("@setting_code", settingCode);
             AddParameter("@setting_val", settingVal);
             ExecuteQuery(sql);
-            return;
         }
         #endregion
     }

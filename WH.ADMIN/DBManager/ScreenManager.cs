@@ -116,7 +116,6 @@ namespace WH.ADMIN.DBManager
             AddParameter("@no_of_seats", screen.NoOfSeats);
             AddParameter("@charge", screen.Charge);
             ExecuteQuery(sql);
-            return;
         }
 
         public void UpdateScreenStatus(long screenId, string status)
@@ -125,7 +124,6 @@ namespace WH.ADMIN.DBManager
             AddParameter("@screen_id", screenId);
             AddParameter("@status", status);
             ExecuteQuery(sql);
-            return;
         }
 
         public void UpdateAssignedMovieStatus(long movieId, long screenId, string status)
@@ -135,7 +133,6 @@ namespace WH.ADMIN.DBManager
             AddParameter("@screen_id", screenId);
             AddParameter("@status", status);
             ExecuteQuery(sql);
-            return;
         }
 
         #endregion
@@ -147,7 +144,6 @@ namespace WH.ADMIN.DBManager
             string sql = @"DELETE FROM SCREENS_SHOW_TIMES WHERE screen_id = @screen_id";
             AddParameter("@screen_id", screenId);
             ExecuteQuery(sql);
-            return;
         }
 
         #endregion

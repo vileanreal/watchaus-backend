@@ -102,7 +102,6 @@ namespace Utilities
                 validChars += specialChars;
             }
 
-            //int length = _random.Next(MinLength, MaxLength + 1);
             int length = MinLength;
             char[] chars = new char[length];
             byte[] data = new byte[length];

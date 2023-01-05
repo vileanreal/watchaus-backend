@@ -140,8 +140,6 @@ namespace WH.ADMIN.Services
 
         public OperationResult DeleteScreen(long screenId, Session session)
         {
-            BranchService branchService = new BranchService();
-
             if (!IsScreenExist(screenId))
             {
                 return OperationResult.Failed("Screen doesn't exist");

@@ -45,7 +45,6 @@ namespace WH.ADMIN.DBManager
             AddParameter("@user_id", audit.UserId);
             AddParameter("@description", audit.Description);
             ExecuteQuery(sql);
-            return;
         }
         #endregion
 
