@@ -17,7 +17,7 @@ namespace Utilities.attributes
             ErrorMessage = "The password is not valid.";
         }
 
-        public override bool IsValid(object value)
+        public override bool IsValid (object? value)
         {
             if (value == null)
             {

@@ -11,7 +11,7 @@ namespace Utilities
         // "file:///C:/path/to/image.jpg"
         // "C:\\path\\to\\image.jpg"
         // "\\\\server\\share\\path\\to\\image.jpg"
-        public static string SaveBase64Image(string base64Image, string filePath, string host = null, int port = 0, string username = null, string password = null)
+        public static string SaveBase64Image(string base64Image, string filePath, string? host = null, int port = 0, string? username = null, string? password = null)
         {
             if (filePath.StartsWith("sftp://"))
             {
@@ -24,7 +24,7 @@ namespace Utilities
         }
 
 
-        private static string SaveBase64ImageToSftp(string base64Image, string filePath, string host, int port, string username, string password)
+        private static string SaveBase64ImageToSftp(string base64Image, string filePath, string? host, int port, string? username, string? password)
         {
             byte[] imageBytes = Convert.FromBase64String(base64Image);
 
@@ -108,7 +108,7 @@ namespace Utilities
 
 
 
-        public static string GetBase64Image(string filePath, string host = null, int port = 0, string username = null, string password = null)
+        public static string GetBase64Image(string filePath, string? host = null, int port = 0, string? username = null, string? password = null)
         {
             if (filePath.StartsWith("sftp://"))
             {
@@ -120,7 +120,7 @@ namespace Utilities
             }
         }
 
-        private static string GetBase64ImageFromSftp(string filePath, string host, int port, string username, string password)
+        private static string GetBase64ImageFromSftp(string filePath, string? host, int port, string? username, string? password)
         {
             // Retrieve the image from an SFTP server
             if (string.IsNullOrEmpty(host))
@@ -140,6 +140,8 @@ namespace Utilities
                 throw new ArgumentException("Password must be specified for SFTP file path.");
             }
 
+            var base64 = string.Empty;
+
             using (SftpClient client = new SftpClient(host, port, username, password))
             {
                 client.Connect();
@@ -147,10 +149,11 @@ namespace Utilities
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     client.DownloadFile(filePath, memoryStream);
-                    return Convert.ToBase64String(memoryStream.ToArray());
+                    base64 = Convert.ToBase64String(memoryStream.ToArray());
                 }
                 client.Disconnect();
             }
+            return base64;
         }
 
         private static string GetBase64ImageFromLocalFileSystem(string filePath)
@@ -184,7 +187,7 @@ namespace Utilities
             {
                 data = Convert.FromBase64String(base64);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

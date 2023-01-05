@@ -155,8 +155,8 @@ namespace WH.ADMIN
                 var identity = context.Principal.Identity as ClaimsIdentity;
 
                 // Add a new claim or update the existing claim
-                identity?.AddClaim(new Claim("roleId", user.RoleId?.ToString() ?? ""));
-                identity?.AddClaim(new Claim("roleName", user.RoleName ?? ""));
+                identity?.AddClaim(new Claim("roleId", user?.RoleId?.ToString() ?? ""));
+                identity?.AddClaim(new Claim("roleName", user?.RoleName ?? ""));
             }
             catch (Exception ex)
             {

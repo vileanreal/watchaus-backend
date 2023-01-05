@@ -68,7 +68,7 @@ namespace Utilities
 
     public static class PasswordHelper
     {
-        private static readonly RNGCryptoServiceProvider _random = new RNGCryptoServiceProvider();
+        private static readonly RandomNumberGenerator _random = RandomNumberGenerator.Create();
 
         public static int MinLength { get; set; } = 8;
         public static int MaxLength { get; set; } = int.MaxValue;
