@@ -117,7 +117,7 @@ namespace WH.ADMIN.DBManager
         #region UPDATE
         public void UpdateMovieStatus(long movieId, string status)
         {
-            string sql = @"UPDATE MOVIES SET status = @status WHERE movie_id = @movie_id WHERE status = 'A'";
+            string sql = @"UPDATE MOVIES SET status = @status WHERE movie_id = @movie_id AND status = 'A'";
             AddParameter("@movie_id", movieId);
             AddParameter("@status", status);
             ExecuteQuery(sql);

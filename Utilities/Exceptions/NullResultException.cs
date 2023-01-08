@@ -20,7 +20,7 @@ namespace Utilities.Exceptions
             : base(message)
         {
         }
-
+ 
         public NullResultException(string message, Exception innerException)
             : base(message, innerException)
         {
