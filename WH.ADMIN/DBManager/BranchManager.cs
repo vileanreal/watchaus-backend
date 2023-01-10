@@ -16,7 +16,7 @@ namespace WH.ADMIN.DBManager
         }
         public List<Branch> SelectBranchList()
         {
-            string sql = @$"SELECT * FROM BRANCHES WHERE status = @status";
+            string sql = @$"SELECT * FROM BRANCHES WHERE status = @status ORDER BY branch_id DESC";
             AddParameter("@status", Status.ACTIVE);
             return SelectList<Branch>(sql);
 
@@ -53,7 +53,7 @@ namespace WH.ADMIN.DBManager
             string sql = @"UPDATE BRANCHES SET
                            status = @status
                            WHERE
-                           branch_id = @branch_id WHERE status = 'A'";
+                           branch_id = @branch_id AND status = 'A'";
             AddParameter("@branch_id", branchId);
             AddParameter("@status", status);
             ExecuteQuery(sql);

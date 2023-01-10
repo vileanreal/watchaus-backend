@@ -6,7 +6,7 @@ namespace WH.ADMIN.Models.RequestResponse
     public class UpdateUserRequest
     {
         [Required]
-        [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Username must not contain any special characters.")]
+        [RegularExpression("^[a-zA-Z0-9_]*$", ErrorMessage = "Username must not contain any special characters.")]
         public string Username { get; set; }
         [Required]
         public string FirstName { get; set; }
