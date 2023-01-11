@@ -134,7 +134,7 @@ namespace WH.ADMIN.Controllers
             Session session = new Session(HttpContext.User);
 
             ScreenService service = new ScreenService();
-            var result = service.AssignMovieToScreen(new ScreenAssignedMovies(request), session);
+            var result = service.DeleteAssignedMovie(new ScreenAssignedMovies(request), session);
 
             if (!result.IsSuccess)
             {
