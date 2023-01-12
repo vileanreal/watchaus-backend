@@ -13,7 +13,6 @@ namespace WH.ADMIN.Models.RequestResponse
         [Required]
         public string SettingCode { get; set; }
 
-        [Required]
         public string SettingVal { get; set; }
     }
 }
